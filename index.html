@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FMCSA Carrier Intelligence</title>
+<meta name="description" content="Pay-per-call motor carrier safety, authority and identity-linkage data from FMCSA public records, for AI agents over MCP and A2A.">
+<link rel="icon" href="icon.png">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <a class="home" href="./">FMCSA Carrier Intelligence</a>
+  <nav><a href="for-agents/">For agents</a><a href="terms/">Terms</a><a href="privacy/">Privacy</a></nav>
+</header>
+<main>
+<h1>Motor carrier safety and identity data, for agents</h1>
+<p class="lede">Look up a US interstate motor carrier by USDOT number and get its current authority, insurance-filing, out-of-service and safety-rating status, its snapshot history, and identity-linkage signals that help spot a carrier re-registering under a new number. Built from FMCSA's public data. Priced per call, paid in USDC on Solana via <a href="https://www.x402.org/">x402</a>. No account, no API key.</p>
+
+<h2>Who it's for</h2>
+<p>Freight brokers, shippers and 3PLs vetting carriers before a load is tendered: catching double-brokering and carrier-identity theft, checking that a carrier's operating authority and insurance filings are on file, and checking whether a new applicant links back to a carrier already removed from your network. It describes regulated motor carriers as business entities. It is not a consumer report and must not be used as one; see the <a href="terms/">Terms</a>.</p>
+
+<h2>Connect</h2>
+<table>
+<tr><th>Protocol</th><th>Endpoint</th></tr>
+<tr><td>MCP (streamable HTTP)</td><td><code>https://fmcsa-mcp-843680657471.us-central1.run.app/mcp</code></td></tr>
+<tr><td>A2A (JSON-RPC)</td><td><code>https://fmcsa-a2a-843680657471.us-central1.run.app/</code><br>Agent Card: <code>/.well-known/agent-card.json</code></td></tr>
+</table>
+<p>Full integration detail (request shapes, payment flow, error codes, rate limits) is on <a href="for-agents/">For agents</a>.</p>
+
+<h2>Pricing</h2>
+<p>You pay only when a call returns records. A USDOT number that doesn't exist, a search with zero results, or a service error is served free: the payment authorization goes unused.</p>
+<table>
+<tr><th>Tool</th><th>Price per call (USDC)</th></tr>
+<tr><td><code>lookup_carrier</code></td><td>$0.01</td></tr>
+<tr><td><code>search_carriers</code></td><td>$0.02</td></tr>
+<tr><td><code>get_safety_history</code></td><td>$0.015</td></tr>
+<tr><td><code>check_carrier_identity</code></td><td>$0.05</td></tr>
+<tr><td><code>check_address_consistency</code></td><td>$0.01</td></tr>
+<tr><td><code>confirm_identity_link</code></td><td>$0.08</td></tr>
+<tr><td><code>check_applicant_against_roster</code></td><td>$0.08 + $0.01 per roster entry (after de-duplication; 1 to 100 entries). A 10-entry roster costs $0.18.</td></tr>
+<tr><td><code>get_catalog</code>, <code>get_sample</code>, <code>get_identity_sample</code>, <code>screen_carrier_identity</code></td><td>Free</td></tr>
+</table>
+
+<h2>About the data</h2>
+<p>The data comes from FMCSA's public open-data releases (the carrier census, licensing and insurance filings, out-of-service orders, revocations, SMS safety measures and crash records). It is refreshed monthly, and every response states the date its records are current as of. FMCSA builds its own snapshots from a database up to 24 hours old and states that it does not reflect real-time data, so treat any answer as of its stated date, never as live. This service is not affiliated with, endorsed by, or operated by FMCSA or the US Department of Transportation.</p>
+</main>
+<footer>
+  <p>&copy; 2026 4SAKE Agent Co &middot; <a href="terms/">Terms of Service</a> &middot; <a href="privacy/">Privacy Policy</a> &middot; <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a></p>
+  <p>Underlying data: Federal Motor Carrier Safety Administration, via Data.gov. US Government work, not subject to domestic copyright (17 U.S.C. &sect; 105).</p>
+</footer>
+</body>
+</html>

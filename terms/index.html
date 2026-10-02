@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Terms of Service</title>
+<meta name="description" content="Terms of Service for FMCSA Carrier Intelligence, operated by 4SAKE Agent Co.">
+<link rel="icon" href="../icon.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header>
+  <a class="home" href="../">FMCSA Carrier Intelligence</a>
+  <nav><a href="../for-agents/">For agents</a><a href="./">Terms</a><a href="../privacy/">Privacy</a></nav>
+</header>
+<main>
+<h1>Terms of Service</h1>
+<p class="meta">Last updated: October 2, 2026</p>
+
+<p>These Terms govern your use of FMCSA Carrier Intelligence (the "Service"), operated by 4SAKE Agent Co ("we", "us"). The Service includes its MCP and A2A endpoints, every tool they expose, and this website. By calling any tool, including through an automated agent acting for you, you agree to these Terms. If you use the Service for an organization, you represent that you have authority to bind it. If you do not agree, do not use the Service.</p>
+
+<h2>1. What the Service is</h2>
+<p>The Service provides programmatic access to information about US motor carriers. It covers operating authority, insurance filings on file, out-of-service orders, revocations, safety ratings and measures, snapshot history, and identity-linkage signals derived from that data. It is built from public data released by the Federal Motor Carrier Safety Administration ("FMCSA").</p>
+
+<h2>2. Public-domain data; what you pay for</h2>
+<p>The underlying data is a work of the US Government. It is not subject to domestic copyright protection (17 U.S.C. &sect; 105) and is published by FMCSA through its open-data program and Data.gov. We do not claim ownership of it. Our charges are for access, normalization, derivation and delivery, not for the data itself. Attribution: the data is from the Federal Motor Carrier Safety Administration, via Data.gov.</p>
+
+<h2>3. No affiliation or endorsement</h2>
+<p>The Service is not operated by, affiliated with, sponsored by or endorsed by FMCSA, the US Department of Transportation, or any government agency. We do not use their seals or logos. Nothing in the Service is an official FMCSA determination, rating or record.</p>
+
+<h2>4. FMCSA's disclaimer</h2>
+<p>FMCSA states, and we repeat verbatim:</p>
+<blockquote>"The information on the FMCSA Web site is not intended as, nor offered as, legal advice. In no event shall the FMCSA, nor any of its employees, be responsible or liable, directly or indirectly, for any damage or loss caused, or alleged to be caused, by or in connection with the use of or reliance on any such content, goods, or services available on or through any such site or resource."</blockquote>
+<p>The same statement is included in every paid response.</p>
+
+<h2>5. Freshness and accuracy</h2>
+<p>FMCSA builds its data snapshots from a database up to 24 hours old and states that the data does not reflect real-time information. We refresh the Service from FMCSA's releases about once a month. Every response states the date its records are current as of (<code>record_as_of</code>), and you must evaluate each answer as of that date. A carrier's authority, insurance or out-of-service status may have changed since then. Before relying on an answer for a decision that matters, confirm current status with FMCSA directly.</p>
+<p>Some fields are our own derivations, for example <code>safety_tier_derived</code>, identity match scores, cluster assignments and flags. They are computed signals with known false-positive rates, described in the responses themselves. They are not facts about a carrier and not findings of fraud or wrongdoing. A "flagged" or "linked" result is a reason to look further, never a conclusion. The Service may contain errors, omissions or normalization artifacts, inherited from the source data or introduced by our processing.</p>
+
+<h2>6. Not a consumer reporting agency; restrictions on use</h2>
+<p><strong>(a) Status.</strong> We are not a "consumer reporting agency," and the Service does not provide "consumer reports," as those terms are defined in the Fair Credit Reporting Act, 15 U.S.C. &sect; 1681 et seq. ("FCRA"), or any similar state law.</p>
+<p><strong>(b) What the data is.</strong> The data concerns regulated interstate motor carriers as business entities, in their capacity as businesses. It is sourced from FMCSA's public open-data program and is provided solely for use in business transactions, such as vetting a carrier before tendering freight.</p>
+<p><strong>(c) Your representation and warranty.</strong> You represent, warrant and agree that you will not use the Service or any information obtained from it, in whole or in part:</p>
+<ol type="i">
+<li>as a factor in establishing any individual's eligibility for credit or insurance to be used primarily for personal, family or household purposes, for employment, or for housing or any other tenancy, or for any other purpose authorized under 15 U.S.C. &sect; 1681b; or</li>
+<li>in any manner that would cause the Service or any such information to be construed as a "consumer report" under the FCRA.</li>
+</ol>
+<p>This is a condition of your right to use the Service. Breaching it ends that right immediately and makes you responsible for the resulting claims (see section 11).</p>
+
+<h2>7. Acceptable use</h2>
+<p>You will not:</p>
+<ul>
+<li>circumvent, probe or interfere with payment, rate limiting or other controls, including by replaying or forging payments or rotating addresses or wallets to evade limits;</li>
+<li>bulk-harvest or enumerate the dataset, or use the Service to build a substitute for it;</li>
+<li>use the Service to harass, defame or unlawfully discriminate against any person or business, or publish identity-linkage signals as statements of fact about a carrier;</li>
+<li>use the Service in violation of any applicable law, including sanctions and export laws;</li>
+<li>represent that the Service or its output comes from or is endorsed by FMCSA or any government agency.</li>
+</ul>
+<p>We may block, rate-limit or refuse any request, IP address or wallet at our discretion, including to protect the Service or other users.</p>
+
+<h2>8. Payment</h2>
+<p>Paid tools are priced per call as stated on our <a href="../">pricing page</a> and, authoritatively, in each call's x402 payment challenge. Payment is in USDC on the Solana blockchain. You pay network fees, if any, and any taxes that apply to your purchase.</p>
+<p>A payment is verified before a paid tool runs. It is settled only if the call delivers records. A request for a record that does not exist, a search with no results, an invalid request, a timeout or a service error is served without charge, and the payment authorization goes unused. If settlement fails after a tool runs, the response is withheld and nothing is charged. Each payment authorization can be used once.</p>
+
+<h2>9. Refunds and disputes</h2>
+<p>Blockchain settlements cannot be reversed by us or by you. If you believe you were charged for a call that did not deliver records, were charged the wrong amount, or were charged twice, email <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a> within 30 days of the charge. Include the transaction signature, the paying wallet address and the approximate time of the request. We will check the claim against our records and the blockchain. If we find a charge was made in error, we will refund that amount in USDC to the paying wallet. Refunds are otherwise at our discretion. Our total liability for any billing dispute is limited to the amount of the disputed charges.</p>
+
+<h2>10. Disclaimer of warranties</h2>
+<p>THE SERVICE AND ALL INFORMATION FROM IT ARE PROVIDED "AS IS" AND "AS AVAILABLE," WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED. THESE INCLUDE ANY WARRANTY OF ACCURACY, COMPLETENESS, TIMELINESS, MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE OR NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, ERROR-FREE OR SECURE, OR THAT ANY CARRIER INFORMATION IS CURRENT OR CORRECT.</p>
+
+<h2>11. Limitation of liability; indemnity</h2>
+<p>TO THE FULLEST EXTENT PERMITTED BY LAW, 4SAKE AGENT CO WILL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, EXEMPLARY OR PUNITIVE DAMAGES. THIS INCLUDES LOST PROFITS, LOST LOADS OR FREIGHT, CARGO LOSS, OR DAMAGES ARISING FROM ANY DECISION TO USE OR NOT USE A CARRIER, EVEN IF WE WERE ADVISED OF THE POSSIBILITY. OUR TOTAL LIABILITY FOR ALL CLAIMS RELATING TO THE SERVICE IS LIMITED TO THE AMOUNT YOU PAID US FOR THE SERVICE IN THE THREE MONTHS BEFORE THE EVENT GIVING RISE TO THE CLAIM.</p>
+<p>You will defend, indemnify and hold harmless 4SAKE Agent Co against any claims, losses and expenses, including reasonable attorneys' fees, that arise from your use of the Service, your breach of these Terms (including section 6), or your violation of any law or third-party right.</p>
+
+<h2>12. Changes and termination</h2>
+<p>We may change, suspend or discontinue the Service or any tool, change prices, or update these Terms at any time. Updated Terms take effect when posted here, with a new "Last updated" date. Price changes take effect in the payment challenge. If you continue to use the Service after a change, you accept it. We may end your access at any time for breach of these Terms.</p>
+
+<h2>13. Governing law</h2>
+<p>These Terms are governed by the laws of the State of Georgia, USA, without regard to its conflict-of-laws rules. The state and federal courts located in Georgia have exclusive jurisdiction over any dispute arising from these Terms or the Service, and you consent to that jurisdiction.</p>
+
+<h2>14. General</h2>
+<p>These Terms are the entire agreement between you and us about the Service. If any provision is unenforceable, the rest remain in effect. If we fail to enforce a provision, we have not waived it. You may not assign these Terms. We may assign them. Sections 2 through 6 and 9 through 14 survive termination.</p>
+
+<h2>15. Contact</h2>
+<p>4SAKE Agent Co &middot; <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a></p>
+</main>
+<footer>
+  <p>4SAKE Agent Co &middot; <a href="../privacy/">Privacy Policy</a> &middot; Not affiliated with or endorsed by FMCSA or the US DOT.</p>
+</footer>
+</body>
+</html>

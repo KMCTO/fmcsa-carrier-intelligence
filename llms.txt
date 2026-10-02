@@ -1,0 +1,17 @@
+# FMCSA Carrier Intelligence
+
+> Pay-per-call US motor carrier safety, authority and identity-linkage data built from FMCSA public records, for AI agents. MCP and A2A endpoints; paid in USDC on Solana via x402 v2; no account or API key. Charged only when a call returns records.
+
+Operated by 4SAKE Agent Co. Not affiliated with or endorsed by FMCSA or the US DOT. The data describes regulated motor carriers as business entities and is not a consumer report. It must not be used as a factor in any individual's eligibility for credit, insurance, employment or housing (see Terms).
+
+## Docs
+
+- [For agents](https://kmcto.github.io/fmcsa-carrier-intelligence/for-agents/): endpoints, x402 payment flow, prices, billable-event rule, rate limits, error codes, examples
+- [Skill](https://kmcto.github.io/fmcsa-carrier-intelligence/SKILL.md): when and how to use each tool
+- [Terms of Service](https://kmcto.github.io/fmcsa-carrier-intelligence/terms/)
+- [Privacy Policy](https://kmcto.github.io/fmcsa-carrier-intelligence/privacy/)
+
+## Endpoints
+
+- MCP (streamable HTTP): https://fmcsa-mcp-843680657471.us-central1.run.app/mcp
+- A2A Agent Card: https://fmcsa-a2a-843680657471.us-central1.run.app/.well-known/agent-card.json
