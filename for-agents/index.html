@@ -108,7 +108,8 @@ Content-Type: application/json
 {"jsonrpc":"2.0","id":"1","method":"message/send","params":{"message":{
   "messageId":"m1","role":"user",
   "parts":[{"kind":"text","text":"{\"tool\":\"lookup_carrier\",\"arguments\":{\"usdot_number\":2122247}}"}]}}}</code></pre>
-<p>The result arrives as JSON text in <code>result.artifacts[0].parts[0].text</code>. Only <code>message/send</code> (and <code>SendMessage</code>) is served. Every other JSON-RPC method returns <code>-32601</code>. A message with more than one part carrying a tool call is rejected rather than guessed at.</p>
+<p>The result arrives as JSON text in <code>result.artifacts[0].parts[0].text</code>. Both A2A protocol versions work: <code>message/send</code> (0.3, shown above) and <code>SendMessage</code> (1.0, normally with an <code>A2A-Version: 1.0</code> header, <code>"role": "ROLE_USER"</code> and parts like <code>{"text": "..."}</code>). Requests that mix the two are accepted too: the method name decides the version. Every other JSON-RPC method returns <code>-32601</code>. A message with more than one part carrying a tool call is rejected rather than guessed at.</p>
+<p>A message that isn't a tool call (plain English, "ping") is answered free with <code>error_code</code> <code>invalid_request</code>, plus every tool and its price, a copy-paste <code>example</code> call, and a link back to this page.</p>
 
 <h2>Restrictions on use</h2>
 <p>This data describes regulated motor carriers as business entities. It is not a consumer report. By calling a paid tool you agree to the <a href="../terms/">Terms of Service</a>, including the commitment not to use it as a factor in any individual's eligibility for credit, insurance, employment or housing.</p>
