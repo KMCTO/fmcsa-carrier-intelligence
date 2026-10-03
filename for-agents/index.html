@@ -68,7 +68,7 @@
 
 <h2>Rate limits</h2>
 <ul>
-<li>30 requests per minute per client IP address, across all tools.</li>
+<li>60 requests per minute per client IP address, across all tools.</li>
 <li>60 paid requests per minute per paying wallet.</li>
 </ul>
 <p>Exceeding either returns HTTP 429 with <code>error_code</code> <code>rate_limited</code>. Request bodies are capped at 256 KiB (HTTP 413, <code>request_too_large</code>).</p>
