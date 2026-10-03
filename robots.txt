@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kmcto.github.io/fmcsa-carrier-intelligence/sitemap.xml

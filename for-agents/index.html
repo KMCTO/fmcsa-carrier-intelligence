@@ -28,9 +28,9 @@
 <h2>Authentication and payment</h2>
 <p>There are no accounts or API keys. Paid tools use <a href="https://www.x402.org/">x402</a> version 2, settled in USDC on Solana mainnet (network <code>solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp</code>).</p>
 <ol>
-<li>Call a paid tool with no payment. You get HTTP 402 with a <code>PaymentRequired</code> body. Its <code>accepts[0]</code> gives the exact <code>amount</code> (atomic USDC units, 6 decimals), <code>asset</code>, <code>payTo</code> and <code>network</code>. Use these values and do not hard-code them.</li>
-<li>Sign a payment for exactly those requirements and resend the same request with the encoded payload in the <code>X-PAYMENT</code> header.</li>
-<li>The payment is verified before the tool runs. It is settled after the tool runs, and only if the call delivered records.</li>
+<li>Call a paid tool with no payment. You get HTTP 402. The challenge is in the <code>PAYMENT-REQUIRED</code> response header (base64 JSON, x402 v2), and the same JSON is in the body. Its <code>accepts[0]</code> gives the exact <code>amount</code> (atomic USDC units, 6 decimals), <code>asset</code>, <code>payTo</code>, <code>network</code> and <code>extra.feePayer</code>. Use these values and do not hard-code them.</li>
+<li>Sign a payment for exactly those requirements and resend the same request with the encoded payload in the <code>PAYMENT-SIGNATURE</code> header. The legacy <code>X-PAYMENT</code> header is also accepted. Any standard x402 v2 client does both steps for you.</li>
+<li>The payment is verified before the tool runs. It is settled after the tool runs, and only if the call delivered records. A paid response carries the settlement receipt, including the on-chain transaction, in the <code>PAYMENT-RESPONSE</code> header.</li>
 </ol>
 <p>Each signed payment can be used once. A replayed payment is rejected with <code>duplicate_payment</code> before it is verified. Only x402 version 2 payloads are accepted. The <code>accepted</code> requirements in your payload must match the server's requirements for the tool you are calling, or the payment is rejected.</p>
 
@@ -98,7 +98,7 @@ Accept: application/json, text/event-stream
 # then, with the returned Mcp-Session-Id header:
 {"jsonrpc":"2.0","method":"notifications/initialized","params":{}}
 {"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"lookup_carrier","arguments":{"usdot_number":2122247}}}
-# -> HTTP 402 with accepts[0].amount "10000" ($0.01); resend with X-PAYMENT</code></pre>
+# -> HTTP 402, PAYMENT-REQUIRED header: accepts[0].amount "10000" ($0.01); resend with PAYMENT-SIGNATURE</code></pre>
 
 <h2>Example: A2A</h2>
 <p>Send the tool call as JSON in the text of exactly one message part:</p>
