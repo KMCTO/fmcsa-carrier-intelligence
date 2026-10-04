@@ -11,9 +11,9 @@ Full reference: https://kmcto.github.io/fmcsa-carrier-intelligence/for-agents/
 ## When to use which tool
 
 1. Start free: `get_catalog` describes every field, the freshness date and the prices.
-2. **Is this carrier allowed to haul, right now?** Use `lookup_carrier(usdot_number)` ($0.01). Check `carrier_status`, `authority_status`, `oos_orders_active` and the `insurance_*_on_file` flags. Always read `provenance.record_as_of`, because the data is a monthly snapshot, not live.
+2. **Is this carrier allowed to haul, right now?** Use `lookup_carrier(usdot_number)` ($0.01). Check `carrier_status`, `authority_status`, `oos_orders_active` and the `insurance_*_on_file` flags. Always read `provenance.record_as_of`, because the data is a monthly snapshot, not live. Also check `insurance_cancel_pending`: when true, an insurance cancellation is on file. Compare `soonest_cancel_effective_date` with today, because it may already have taken effect.
 3. **Is the caller really this carrier?** Pass what the caller claims (`claimed_name`, `claimed_street`, `claimed_city`, `claimed_state`, `claimed_zip`) to `lookup_carrier`. You get `name_match` / `physical_address_match` booleans, never the values on file.
-4. **Has anything changed recently?** Use `get_safety_history(usdot_number, since_date?)` ($0.015).
+4. **Has anything changed recently?** Use `get_safety_history(usdot_number, since_date?)` ($0.015). The changelog lists real changes only.
 5. **Is this carrier linked to others?** Screen free with `screen_carrier_identity(usdot_number)`. For the full assessment, use `check_carrier_identity` ($0.05). To see whether contact details disagree across filings, use `check_address_consistency` ($0.01).
 6. **Is this applicant linked to a carrier I already know?**
    - For one known carrier: `confirm_identity_link(usdot_number_a, usdot_number_b)` ($0.08).

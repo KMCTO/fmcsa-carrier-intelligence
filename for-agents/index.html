@@ -65,6 +65,7 @@
 
 <h2>Freshness</h2>
 <p>Every response carries <code>provenance.record_as_of</code>. Identity responses also carry <code>identity_data_lag_days</code>. The data is refreshed monthly from FMCSA's public releases. FMCSA states its data does not reflect real-time information.</p>
+<p>Two fields are especially time-sensitive. <code>insurance_cancel_pending</code> is true when an insurance cancellation is on file but not yet effective as of <code>record_as_of</code>; it's rare, true for a few dozen carriers. When it's true, compare <code>soonest_cancel_effective_date</code> with today rather than relying on <code>days_to_cancel_effective</code>, which counts from <code>record_as_of</code>. The cancellation may already have taken effect. In <code>get_safety_history</code>, the <code>changelog</code> lists real changes only; it leaves out the entries recorded on the day a field was first tracked.</p>
 
 <h2>Rate limits</h2>
 <ul>
