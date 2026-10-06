@@ -27,19 +27,28 @@
 
 <h2>Authentication and payment</h2>
 <p>There are no accounts or API keys. Paid tools use <a href="https://www.x402.org/">x402</a> version 2, settled in USDC on Solana mainnet (network <code>solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp</code>).</p>
+<p>Each endpoint uses the matching x402 transport. Any standard x402 v2 client for that transport does all of this for you.</p>
+<p><strong>MCP</strong> (x402's MCP transport):</p>
 <ol>
-<li>Call a paid tool with no payment. You get HTTP 402. The challenge is in the <code>PAYMENT-REQUIRED</code> response header (base64 JSON, x402 v2), and the same JSON is in the body. Its <code>accepts[0]</code> gives the exact <code>amount</code> (atomic USDC units, 6 decimals), <code>asset</code>, <code>payTo</code>, <code>network</code> and <code>extra.feePayer</code>. Use these values and do not hard-code them.</li>
-<li>Sign a payment for exactly those requirements and resend the same request with the encoded payload in the <code>PAYMENT-SIGNATURE</code> header. The legacy <code>X-PAYMENT</code> header is also accepted. Any standard x402 v2 client does both steps for you.</li>
-<li>The payment is verified before the tool runs. It is settled after the tool runs, and only if the call delivered records. A paid response carries the settlement receipt, including the on-chain transaction, in the <code>PAYMENT-RESPONSE</code> header.</li>
+<li>Call a paid tool with no payment. You get a normal HTTP 200 response whose tool result has <code>isError: true</code>. The x402 v2 payment request is in <code>structuredContent</code>, and the same JSON is in <code>content[0].text</code> and the <code>PAYMENT-REQUIRED</code> response header.</li>
+<li>Sign a payment for exactly those requirements and repeat the same <code>tools/call</code> with the payment payload at <code>params._meta["x402/payment"]</code>. A <code>PAYMENT-SIGNATURE</code> header is also accepted.</li>
+<li>A paid result carries the settlement receipt, including the on-chain transaction, at <code>result._meta["x402/payment-response"]</code> and in the <code>PAYMENT-RESPONSE</code> header.</li>
 </ol>
-<p>Each signed payment can be used once. A replayed payment is rejected with <code>duplicate_payment</code> before it is verified. Only x402 version 2 payloads are accepted. The <code>accepted</code> requirements in your payload must match the server's requirements for the tool you are calling, or the payment is rejected.</p>
+<p><strong>A2A</strong> (x402's HTTP transport):</p>
+<ol>
+<li>Call a paid tool with no payment. You get HTTP 402. The challenge is in the <code>PAYMENT-REQUIRED</code> response header (base64 JSON, x402 v2), and the same JSON is in the body.</li>
+<li>Sign a payment for exactly those requirements and resend the same request with the encoded payload in the <code>PAYMENT-SIGNATURE</code> header. The legacy <code>X-PAYMENT</code> header is also accepted.</li>
+<li>A paid response carries the settlement receipt in the <code>PAYMENT-RESPONSE</code> header.</li>
+</ol>
+<p>On both, the request's <code>accepts[0]</code> gives the exact <code>amount</code> (atomic USDC units, 6 decimals), <code>asset</code>, <code>payTo</code>, <code>network</code> and <code>extra.feePayer</code>. Use these values and do not hard-code them. The payment is verified before the tool runs. It is settled after the tool runs, and only if the call delivered records.</p>
+<p>Each signed payment can be used once. A replayed payment is rejected before it is verified: <code>duplicate_payment</code> on A2A, or a fresh payment request saying the payment was already used on MCP. Only x402 version 2 payloads are accepted. The <code>accepted</code> requirements in your payload must match the server's requirements for the tool you are calling, or the payment is rejected.</p>
 
 <h2>Billable-event rule</h2>
 <p>You are charged only when a call returns records:</p>
 <ul>
 <li>Charged: a lookup or check that resolves the carrier(s), or a search with one or more results. A clean identity result (for example <code>cluster_size</code> 1, or <code>linked: false</code> for carriers that both exist) is a complete answer and is charged.</li>
 <li>Not charged: <code>not_found</code>, a search with zero results, <code>invalid_arguments</code>, <code>query_timeout</code>, or any service error. The response is served and nothing is settled.</li>
-<li>If settlement fails after the tool ran, you receive <code>settlement_failed</code> (HTTP 502) instead of the data, and nothing is charged.</li>
+<li>If settlement fails after the tool ran, you receive no data and nothing is charged: <code>settlement_failed</code> (HTTP 502) on A2A, or on MCP a fresh payment request whose <code>x402/payment-response</code> shows <code>success: false</code>.</li>
 </ul>
 
 <h2>Tools and prices</h2>
@@ -99,7 +108,8 @@ Accept: application/json, text/event-stream
 # then, with the returned Mcp-Session-Id header:
 {"jsonrpc":"2.0","method":"notifications/initialized","params":{}}
 {"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"lookup_carrier","arguments":{"usdot_number":2122247}}}
-# -> HTTP 402, PAYMENT-REQUIRED header: accepts[0].amount "10000" ($0.01); resend with PAYMENT-SIGNATURE</code></pre>
+# -> HTTP 200, result.isError true, result.structuredContent: accepts[0].amount "10000" ($0.01)
+# repeat the call with the signed payment at params._meta["x402/payment"]</code></pre>
 
 <h2>Example: A2A</h2>
 <p>Send the tool call as JSON in the text of exactly one message part:</p>
