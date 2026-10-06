@@ -66,7 +66,7 @@
 <tr><td><code>confirm_identity_link</code></td><td><code>usdot_number_a</code>, <code>usdot_number_b</code></td><td>$0.08</td></tr>
 <tr><td><code>check_applicant_against_roster</code></td><td><code>usdot_number</code>, <code>roster_usdot_numbers</code> (1 to 100 after de-duplication, not including <code>usdot_number</code>)</td><td>$0.08 + $0.01 per roster entry</td></tr>
 </table>
-<p>Prices are quoted in the 402 challenge, and the challenge is authoritative. For <code>check_applicant_against_roster</code> the quote depends on the roster you send. An oversized roster is rejected and is never silently truncated.</p>
+<p>Prices are quoted in the payment request, and the request is authoritative. For <code>check_applicant_against_roster</code> the quote depends on the roster you send. A missing, empty or oversized roster is quoted at the 1-entry minimum with the problem in the request's <code>error</code> field. If you pay anyway, the call returns <code>invalid_arguments</code> and you are not charged. A roster is never silently truncated.</p>
 
 <h2>What responses never contain</h2>
 <p>Carrier contact and identity fields (legal name, DBA name, addresses, phone, email) are never returned. To check a claimed identity, pass <code>claimed_*</code> arguments to <code>lookup_carrier</code>. You get <code>name_match</code> and <code>physical_address_match</code> booleans back, never the values on file. Identity tools never name or point at any carrier you did not supply yourself.</p>
