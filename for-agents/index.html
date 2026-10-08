@@ -22,6 +22,7 @@
 <li>MCP, streamable HTTP: <code>https://fmcsa-mcp-843680657471.us-central1.run.app/mcp</code></li>
 <li>A2A, JSON-RPC 2.0 over HTTP: <code>https://fmcsa-a2a-843680657471.us-central1.run.app/</code></li>
 <li>A2A Agent Card: <code>https://fmcsa-a2a-843680657471.us-central1.run.app/.well-known/agent-card.json</code> (alias <code>/.well-known/agent.json</code>)</li>
+<li>Plain HTTP, one route per tool: <code>https://fmcsa-mcp-843680657471.us-central1.run.app/x402/&lt;tool&gt;</code>. Described in <code>/openapi.json</code> and listed in <code>/.well-known/x402</code> on the same host.</li>
 </ul>
 <p>Use these exact hostnames. The MCP endpoint rejects any other <code>Host</code> header with HTTP 421.</p>
 
@@ -34,7 +35,7 @@
 <li>Sign a payment for exactly those requirements and repeat the same <code>tools/call</code> with the payment payload at <code>params._meta["x402/payment"]</code>. A <code>PAYMENT-SIGNATURE</code> header is also accepted.</li>
 <li>A paid result carries the settlement receipt, including the on-chain transaction, at <code>result._meta["x402/payment-response"]</code> and in the <code>PAYMENT-RESPONSE</code> header.</li>
 </ol>
-<p><strong>A2A</strong> (x402's HTTP transport):</p>
+<p><strong>A2A and the plain HTTP routes</strong> (x402's HTTP transport):</p>
 <ol>
 <li>Call a paid tool with no payment. You get HTTP 402. The challenge is in the <code>PAYMENT-REQUIRED</code> response header (base64 JSON, x402 v2), and the same JSON is in the body.</li>
 <li>Sign a payment for exactly those requirements and resend the same request with the encoded payload in the <code>PAYMENT-SIGNATURE</code> header. The legacy <code>X-PAYMENT</code> header is also accepted.</li>
@@ -110,6 +111,18 @@ Accept: application/json, text/event-stream
 {"jsonrpc":"2.0","id":2,"method":"tools/call","params":{"name":"lookup_carrier","arguments":{"usdot_number":2122247}}}
 # -> HTTP 200, result.isError true, result.structuredContent: accepts[0].amount "10000" ($0.01)
 # repeat the call with the signed payment at params._meta["x402/payment"]</code></pre>
+
+<h2>Example: plain HTTP</h2>
+<p>Send the tool's arguments as a JSON object, or as query parameters on a GET (lists comma-separated). Free tools answer directly.</p>
+<pre><code>POST /x402/lookup_carrier
+Content-Type: application/json
+
+{"usdot_number": 2122247}
+# -> HTTP 402, PAYMENT-REQUIRED header: accepts[0].amount "10000" ($0.01); resend with PAYMENT-SIGNATURE
+
+GET /x402/check_applicant_against_roster?usdot_number=2122247&amp;roster_usdot_numbers=1001,1002
+GET /x402/screen_carrier_identity?usdot_number=2122247        # free</code></pre>
+<p>A result comes back as JSON with HTTP 200. Errors use HTTP status codes and are never charged: 404 <code>not_found</code>, 400 <code>invalid_arguments</code>, 504 <code>query_timeout</code>.</p>
 
 <h2>Example: A2A</h2>
 <p>Send the tool call as JSON in the text of exactly one message part:</p>
