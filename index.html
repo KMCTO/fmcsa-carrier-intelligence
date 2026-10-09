@@ -16,6 +16,7 @@
 <main>
 <h1>Motor carrier safety and identity data, for agents</h1>
 <p class="lede">Look up a US interstate motor carrier by USDOT number and get its current authority, insurance-filing, out-of-service and safety-rating status, its snapshot history, and identity-linkage signals that help spot a carrier re-registering under a new number. Built from FMCSA's public data. Priced per call, paid in USDC on Solana via <a href="https://www.x402.org/">x402</a>. No account, no API key.</p>
+<p class="badges"><a href="https://agenteconomy.report/s/fmcsa-mcp-843680657471.us-central1.run.app"><img src="https://agenteconomy.report/s/fmcsa-mcp-843680657471.us-central1.run.app.verified.svg" alt="Verified owner on the Agent Economy Report" height="20" onerror="this.closest('p').hidden = true"></a></p>
 
 <h2>Who it's for</h2>
 <p>Freight brokers, shippers and 3PLs vetting carriers before a load is tendered: catching double-brokering and carrier-identity theft, checking that a carrier's operating authority and insurance filings are on file, and checking whether a new applicant links back to a carrier already removed from your network. It describes regulated motor carriers as business entities. It is not a consumer report and must not be used as one; see the <a href="terms/">Terms</a>.</p>
@@ -25,6 +26,7 @@
 <tr><th>Protocol</th><th>Endpoint</th></tr>
 <tr><td>MCP (streamable HTTP)</td><td><code>https://fmcsa-mcp-843680657471.us-central1.run.app/mcp</code></td></tr>
 <tr><td>A2A (JSON-RPC)</td><td><code>https://fmcsa-a2a-843680657471.us-central1.run.app/</code><br>Agent Card: <code>/.well-known/agent-card.json</code></td></tr>
+<tr><td>Plain HTTP (x402)</td><td><code>https://fmcsa-mcp-843680657471.us-central1.run.app/x402/&lt;tool&gt;</code><br>OpenAPI: <code>/openapi.json</code></td></tr>
 </table>
 <p>Full integration detail (request shapes, payment flow, error codes, rate limits) is on <a href="for-agents/">For agents</a>.</p>
 
