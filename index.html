@@ -6,6 +6,19 @@
 <title>FMCSA Carrier Intelligence</title>
 <meta name="description" content="Pay-per-call motor carrier safety, authority and identity-linkage data from FMCSA public records, for AI agents over MCP and A2A.">
 <link rel="icon" href="icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FMCSA Carrier Intelligence">
+<meta property="og:title" content="FMCSA Carrier Intelligence">
+<meta property="og:description" content="Motor carrier safety, authority and identity-linkage data for AI agents. MCP, A2A and HTTP; pay per call in USDC via x402, with free tools to try first.">
+<meta property="og:url" content="https://kmcto.github.io/fmcsa-carrier-intelligence/">
+<meta property="og:image" content="https://kmcto.github.io/fmcsa-carrier-intelligence/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="FMCSA Carrier Intelligence: motor carrier safety, authority and identity-linkage data for AI agents">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FMCSA Carrier Intelligence">
+<meta name="twitter:description" content="Motor carrier safety, authority and identity-linkage data for AI agents. Pay per call in USDC via x402.">
+<meta name="twitter:image" content="https://kmcto.github.io/fmcsa-carrier-intelligence/og.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -29,6 +42,25 @@
 <tr><td>Plain HTTP (x402)</td><td><code>https://fmcsa-mcp-843680657471.us-central1.run.app/x402/&lt;tool&gt;</code><br>OpenAPI: <code>/openapi.json</code></td></tr>
 </table>
 <p>Full integration detail (request shapes, payment flow, error codes, rate limits) is on <a href="for-agents/">For agents</a>.</p>
+
+<h2>Try it free</h2>
+<p>No wallet needed for the free tools. This runs the free identity screen on a real carrier:</p>
+<pre><code>curl "https://fmcsa-mcp-843680657471.us-central1.run.app/x402/screen_carrier_identity?usdot_number=2122247"</code></pre>
+<p>Trimmed response:</p>
+<pre><code>{"screen": {"usdot_number": 2122247, "cluster_size": 1, "flagged": false,
+            "match_score": 1.0, "match_score_practical_ceiling": 2.5,
+            "linked_carriers_with_motive": 0, "record_as_of": "...", ...},
+ "provenance": {"source_dataset": "...", "record_as_of": "...", "disclaimer": "..."}}</code></pre>
+<p>The other free tools are <code>get_catalog</code> (every field and price), <code>get_sample</code> and <code>get_identity_sample</code>. A paid tool called without payment answers with an HTTP 402 stating its price.</p>
+
+<h2>Add it to your agent</h2>
+<ul>
+<li><strong>Claude Code:</strong> <code>claude mcp add --transport http fmcsa-carrier https://fmcsa-mcp-843680657471.us-central1.run.app/mcp</code></li>
+<li><strong>Claude (desktop or web, Pro/Max/Team/Enterprise):</strong> Settings → Connectors → Add custom connector, and enter <code>https://fmcsa-mcp-843680657471.us-central1.run.app/mcp</code></li>
+<li><strong>Cursor:</strong> add to <code>.cursor/mcp.json</code>:
+<pre><code>{"mcpServers": {"fmcsa-carrier": {"url": "https://fmcsa-mcp-843680657471.us-central1.run.app/mcp"}}}</code></pre></li>
+</ul>
+<p>No sign-up or API key. The free tools work in any MCP client. A paid tool answers with an x402 payment request, so paying needs an x402-capable client and a USDC wallet on Solana; see <a href="for-agents/">For agents</a>.</p>
 
 <h2>Pricing</h2>
 <p>You pay only when a call returns records. A USDOT number that doesn't exist, a search with zero results, or a service error is served free: the payment authorization goes unused.</p>
