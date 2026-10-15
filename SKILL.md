@@ -1,7 +1,7 @@
 ---
 name: fmcsa-carrier-intelligence
-description: "Vet a US interstate motor carrier by USDOT number before tendering freight: operating authority, insurance filings, out-of-service orders, safety history, and identity-linkage signals that help spot double brokering or a carrier re-registering under a new number. Free tools to try first; paid calls start at $0.01, are paid in USDC on Solana via x402, and are charged only when records are returned."
-version: 1.0.0
+description: "Vet a US interstate motor carrier by USDOT number before tendering freight: operating authority, insurance filings, out-of-service orders, safety history, and identity-linkage signals that help spot double brokering or a carrier re-registering under a new number. Free tools to try first; paid calls start at $0.01, are paid in USDC on Solana, Base or Polygon via x402, and are charged only when records are returned."
+version: 1.1.0
 metadata:
   openclaw:
     emoji: "🚛"
@@ -42,12 +42,16 @@ Free tools: `get_catalog` (every field, the freshness date, current prices), `ge
 | Do contact details disagree across filings? | `check_address_consistency(usdot_number)` | $0.01 |
 | Is this applicant linked to a carrier I already know? | `confirm_identity_link(usdot_number_a, usdot_number_b)` | $0.08 |
 | Is this applicant linked to anyone on my list (1 to 100 USDOT numbers)? | `check_applicant_against_roster(usdot_number, roster_usdot_numbers)` | $0.08 + $0.01 per entry |
+| Which carriers on my list changed since a date? | `check_roster_changes(roster_usdot_numbers, since)` | $0.05 + $0.005 per entry |
+| Roadside inspection, violation and crash counts | `get_inspection_crash_summary(usdot_number)` | $0.02 |
+| A dated, hashed record for my vetting file | `get_carrier_selection_record(usdot_number)` | $0.10 |
+| I have an MC number, not a USDOT number | `find_carrier_by_mc(mc_number)` | Free |
 
 You are charged only when a call returns records. A carrier that isn't found, an empty search, invalid arguments and timeouts are free.
 
 ## How payment works
 
-A paid call made without payment answers HTTP 402 (x402 v2). The challenge is in the `PAYMENT-REQUIRED` response header and says the exact amount, asset, network and payee. Sign a payment for exactly that and repeat the same request with the payload in a `PAYMENT-SIGNATURE` header; any standard x402 client does both steps. On MCP the challenge comes back as a tool result with `isError: true`, and the payment goes in `params._meta["x402/payment"]`. Settlement is USDC on Solana mainnet.
+A paid call made without payment answers HTTP 402 (x402 v2). The challenge is in the `PAYMENT-REQUIRED` response header and says the exact amount, asset, network and payee. Sign a payment for exactly that and repeat the same request with the payload in a `PAYMENT-SIGNATURE` header; any standard x402 client does both steps. On MCP the challenge comes back as a tool result with `isError: true`, and the payment goes in `params._meta["x402/payment"]`. Settlement is USDC on Solana mainnet, Base or Polygon; the payment request lists all three at the same price. A selection record carries a `record_hash`; `GET /verify/<record_hash>` (free) confirms we issued it. It is a record of what the data showed, not a score, and not legal advice.
 
 **Spending rules for the agent:**
 - Ask the user before the first paid call. Tell them the price, and keep a running total of what has been spent.

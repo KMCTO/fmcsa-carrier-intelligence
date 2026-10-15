@@ -28,7 +28,7 @@
 </header>
 <main>
 <h1>Motor carrier safety and identity data, for agents</h1>
-<p class="lede">Look up a US interstate motor carrier by USDOT number and get its current authority, insurance-filing, out-of-service and safety-rating status, its snapshot history, and identity-linkage signals that help spot a carrier re-registering under a new number. Built from FMCSA's public data. Priced per call, paid in USDC on Solana via <a href="https://www.x402.org/">x402</a>. No account, no API key.</p>
+<p class="lede">Look up a US interstate motor carrier by USDOT number and get its current authority, insurance-filing, out-of-service and safety-rating status, its snapshot history, and identity-linkage signals that help spot a carrier re-registering under a new number. Built from FMCSA's public data. Priced per call, paid in USDC on Solana, Base or Polygon via <a href="https://www.x402.org/">x402</a>. No account, no API key.</p>
 <p class="badges"><a href="https://agenteconomy.report/s/fmcsa-mcp-843680657471.us-central1.run.app"><img src="https://agenteconomy.report/s/fmcsa-mcp-843680657471.us-central1.run.app.verified.svg" alt="Verified owner on the Agent Economy Report" height="20" onerror="this.closest('p').hidden = true"></a></p>
 
 <h2>Who it's for</h2>
@@ -60,7 +60,7 @@
 <li><strong>Cursor:</strong> add to <code>.cursor/mcp.json</code>:
 <pre><code>{"mcpServers": {"fmcsa-carrier": {"url": "https://fmcsa-mcp-843680657471.us-central1.run.app/mcp"}}}</code></pre></li>
 </ul>
-<p>No sign-up or API key. The free tools work in any MCP client. A paid tool answers with an x402 payment request, so paying needs an x402-capable client and a USDC wallet on Solana; see <a href="for-agents/">For agents</a>.</p>
+<p>No sign-up or API key. The free tools work in any MCP client. A paid tool answers with an x402 payment request, so paying needs an x402-capable client and a USDC wallet on Solana, Base or Polygon; see <a href="for-agents/">For agents</a>.</p>
 
 <h2>Pricing</h2>
 <p>You pay only when a call returns records. A USDOT number that doesn't exist, a search with zero results, or a service error is served free: the payment authorization goes unused.</p>
@@ -73,7 +73,10 @@
 <tr><td><code>check_address_consistency</code></td><td>$0.01</td></tr>
 <tr><td><code>confirm_identity_link</code></td><td>$0.08</td></tr>
 <tr><td><code>check_applicant_against_roster</code></td><td>$0.08 + $0.01 per roster entry (after de-duplication; 1 to 100 entries). A 10-entry roster costs $0.18.</td></tr>
-<tr><td><code>get_catalog</code>, <code>get_sample</code>, <code>get_identity_sample</code>, <code>screen_carrier_identity</code></td><td>Free</td></tr>
+<tr><td><code>get_inspection_crash_summary</code></td><td>$0.02</td></tr>
+<tr><td><code>check_roster_changes</code></td><td>$0.05 + $0.005 per roster entry (after de-duplication; 1 to 100 entries). A 10-entry roster costs $0.10.</td></tr>
+<tr><td><code>get_carrier_selection_record</code></td><td>$0.10</td></tr>
+<tr><td><code>get_catalog</code>, <code>get_sample</code>, <code>get_identity_sample</code>, <code>screen_carrier_identity</code>, <code>find_carrier_by_mc</code>, and <code>GET /verify/&lt;hash&gt;</code></td><td>Free</td></tr>
 </table>
 
 <h2>About the data</h2>
