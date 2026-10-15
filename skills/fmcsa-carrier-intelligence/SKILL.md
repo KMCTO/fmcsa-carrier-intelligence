@@ -1,7 +1,7 @@
 ---
 name: fmcsa-carrier-intelligence
 description: "Vet a US interstate motor carrier by USDOT number before tendering freight: operating authority, insurance filings, out-of-service orders, safety history, and identity-linkage signals that help spot double brokering or a carrier re-registering under a new number. Free tools to try first; paid calls start at $0.01, are paid in USDC on Solana, Base or Polygon via x402, and are charged only when records are returned."
-version: 1.1.0
+version: 1.2.0
 metadata:
   openclaw:
     emoji: "🚛"
@@ -46,6 +46,7 @@ Free tools: `get_catalog` (every field, the freshness date, current prices), `ge
 | Roadside inspection, violation and crash counts | `get_inspection_crash_summary(usdot_number)` | $0.02 |
 | A dated, hashed record for my vetting file | `get_carrier_selection_record(usdot_number)` | $0.10 |
 | I have an MC number, not a USDOT number | `find_carrier_by_mc(mc_number)` | Free |
+| Does this broker hold active broker authority? | `check_broker_authority(mc_number or usdot_number)` | $0.05 |
 
 You are charged only when a call returns records. A carrier that isn't found, an empty search, invalid arguments and timeouts are free.
 
@@ -60,7 +61,7 @@ A paid call made without payment answers HTTP 402 (x402 v2). The challenge is in
 
 ## Reading results
 
-1. **Freshness.** The data is a monthly snapshot, not live. Always read `provenance.record_as_of` and say how old the answer is.
+1. **Freshness.** The data is a snapshot, not live. Always read `provenance.record_as_of` and say how old the answer is. For carriers flagged `authority_status_is_legacy_li_not_motus` (about 72% of Active-authority carriers), authority and insurance-on-file status come from FMCSA's legacy archive, which FMCSA stopped updating on 2026-05-14: say so, and tell the user to confirm current status with FMCSA or the insurer.
 2. **Authority and insurance.** Check `carrier_status`, `authority_status`, `oos_orders_active` and the `insurance_*_on_file` flags. When `insurance_cancel_pending` is true, compare `soonest_cancel_effective_date` with today, because it may already have taken effect.
 3. **Is the caller really this carrier?** Pass what the caller claims (`claimed_name`, `claimed_street`, `claimed_city`, `claimed_state`, `claimed_zip`) to `lookup_carrier`. You get `name_match` and `physical_address_match` booleans, never the values on file.
 4. **Safety tier.** `safety_tier_derived` 1 means inspected with zero BASIC alerts; higher means more alerted BASICs. Null means no tier, and `data_quality_flags` says why: `safety_tier_no_inspections` (never inspected: no evidence either way, not a clean record) or `safety_tier_unavailable` (not in FMCSA's SMS files).
