@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="FMCSA Carrier Intelligence">
+  <rect width="64" height="64" rx="14" fill="#13315c"/>
+  <path d="M10 49h44" stroke="#6fb0ff" stroke-width="3" stroke-linecap="round" stroke-dasharray="7 6"/>
+  <path d="M32 11 50 18v13c0 10-7.5 16.5-18 20C21.500 47.500 14 41 14 31V18z" fill="#ffffff"/>
+  <path d="m23.500 31.500 6 6 11.500-12.500" fill="none" stroke="#13315c" stroke-width="4.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
