@@ -24,7 +24,7 @@
 <body>
 <header>
   <a class="home" href="./">FMCSA Carrier Intelligence</a>
-  <nav><a href="for-agents/">For agents</a><a href="request-key/">Request a key</a><a href="terms/">Terms</a><a href="privacy/">Privacy</a></nav>
+  <nav><a href="docs/">Docs</a><a href="pricing/">Pricing</a><a href="lookup/">Free lookup</a><a href="request-key/">Request a key</a><a href="for-agents/">For agents</a><a href="terms/">Terms</a><a href="privacy/">Privacy</a></nav>
 </header>
 <main>
 <h1>Motor carrier safety and identity data, for agents</h1>
@@ -41,7 +41,7 @@
 <tr><td>A2A (JSON-RPC)</td><td><code>https://fmcsa-a2a-843680657471.us-central1.run.app/</code><br>Agent Card: <code>/.well-known/agent-card.json</code></td></tr>
 <tr><td>Plain HTTP (x402)</td><td><code>https://fmcsa-mcp-843680657471.us-central1.run.app/x402/&lt;tool&gt;</code><br>OpenAPI: <code>/openapi.json</code></td></tr>
 </table>
-<p>Full integration detail (request shapes, payment flow, error codes, rate limits) is on <a href="for-agents/">For agents</a>.</p>
+<p>Curl examples for every endpoint are in the <a href="docs/">API documentation</a>; the full payment flow, error codes and rate limits are on <a href="for-agents/">For agents</a>. Prices are on the <a href="pricing/">pricing page</a>.</p>
 
 <h2>Try it free</h2>
 <p>No wallet needed for the free tools. This runs the free identity screen on a real carrier:</p>
@@ -51,7 +51,7 @@
             "match_score": 1.0, "match_score_practical_ceiling": 2.5,
             "linked_carriers_with_motive": 0, "record_as_of": "...", ...},
  "provenance": {"source_dataset": "...", "record_as_of": "...", "disclaimer": "..."}}</code></pre>
-<p>The other free tools are <code>get_catalog</code> (every field and price), <code>get_sample</code> and <code>get_identity_sample</code>. A paid tool called without payment answers with an HTTP 402 stating its price.</p>
+<p>Prefer a browser? The <a href="lookup/">free lookup page</a> turns an MC number into a USDOT number and runs the identity screen. The other free tools are <code>get_catalog</code> (every field and price), <code>get_sample</code> and <code>get_identity_sample</code>. A paid tool called without payment answers with an HTTP 402 stating its price.</p>
 
 <h2>Add it to your agent</h2>
 <ul>
@@ -63,7 +63,7 @@
 <p>No sign-up or API key. The free tools work in any MCP client. A paid tool answers with an x402 payment request, so paying needs an x402-capable client and a USDC wallet on Solana, Base or Polygon; see <a href="for-agents/">For agents</a>. No wallet? <a href="request-key/">Request a free evaluation API key</a>. New to the Montgomery ruling? Read <a href="guides/after-montgomery/">what a carrier-selection file should show</a>.</p>
 
 <h2>Pricing</h2>
-<p>You pay only when a call returns records. A USDOT number that doesn't exist, a search with zero results, or a service error is served free: the payment authorization goes unused.</p>
+<p>Also on the <a href="pricing/">pricing page</a>. You pay only when a call returns records. A USDOT number that doesn't exist, a search with zero results, or a service error is served free: the payment authorization goes unused.</p>
 <table>
 <tr><th>Tool</th><th>Price per call (USDC)</th></tr>
 <tr><td><code>lookup_carrier</code></td><td>$0.01</td></tr>

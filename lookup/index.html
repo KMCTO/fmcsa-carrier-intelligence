@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Free MC number to USDOT number lookup</title>
+<meta name="description" content="Free MC number to USDOT number lookup from FMCSA records, plus a free identity-linkage screen for any carrier. No sign-up. Shows the docket status and how current it is.">
+<link rel="canonical" href="https://kmcto.github.io/fmcsa-carrier-intelligence/lookup/">
+<link rel="icon" href="../icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FMCSA Carrier Intelligence">
+<meta property="og:title" content="Free MC number to USDOT number lookup">
+<meta property="og:description" content="Find the USDOT number behind an MC, MX or FF docket, and screen any carrier for identity linkage. Free, no sign-up.">
+<meta property="og:url" content="https://kmcto.github.io/fmcsa-carrier-intelligence/lookup/">
+<meta property="og:image" content="https://kmcto.github.io/fmcsa-carrier-intelligence/og.png">
+<link rel="stylesheet" href="../style.css">
+<style>
+form { margin: 1rem 0; }
+label { display: block; margin: .9rem 0 .2rem; font-weight: 600; }
+input { width: 100%; max-width: 22rem; padding: .5rem; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; }
+button { margin-left: .5rem; padding: .5rem 1.1rem; font: inherit; font-weight: 600; color: #fff; background: var(--accent); border: 0; border-radius: 4px; cursor: pointer; }
+button[disabled] { opacity: .6; cursor: default; }
+.out { margin-top: 1rem; padding: .75rem 1rem; border-left: 3px solid var(--rule); display: none; }
+.out.ok { border-color: #1a7f37; display: block; }
+.out.err { border-color: #cf222e; display: block; }
+.out table { display: table; }
+.out p { margin: .5rem 0; }
+</style>
+</head>
+<body>
+<header>
+  <a class="home" href="../">FMCSA Carrier Intelligence</a>
+  <nav><a href="../docs/">Docs</a><a href="../pricing/">Pricing</a><a href="./">Free lookup</a><a href="../request-key/">Request a key</a><a href="../for-agents/">For agents</a><a href="../terms/">Terms</a><a href="../privacy/">Privacy</a></nav>
+</header>
+<main>
+<h1>Free MC number to USDOT number lookup</h1>
+<p class="meta">Last updated: October 17, 2026.</p>
+<p class="lede">Got an MC number from a rate confirmation and need the USDOT number? Enter it below. No sign-up, no payment.</p>
+
+<form id="mcform" novalidate>
+  <label for="mc">MC, MX or FF number</label>
+  <input id="mc" name="mc" maxlength="20" placeholder="MC12892" autocomplete="off" inputmode="text">
+  <button id="mcbtn" type="submit">Look up</button>
+</form>
+<div id="mcout" class="out" role="status" aria-live="polite"></div>
+
+<h2>Free identity screen</h2>
+<p>Already have the USDOT number? This checks whether the carrier shares contact identifiers with other registrations under FMCSA's own published chameleon-carrier threshold. It returns a flag and counts only; it never names another carrier.</p>
+<form id="idform" novalidate>
+  <label for="dot">USDOT number</label>
+  <input id="dot" name="dot" maxlength="10" placeholder="2122247" autocomplete="off" inputmode="numeric">
+  <button id="idbtn" type="submit">Screen</button>
+</form>
+<div id="idout" class="out" role="status" aria-live="polite"></div>
+
+<h2>About these results</h2>
+<ul>
+<li>The lookup reads FMCSA's public records. Each answer states the date its records are current as of. It is not live.</li>
+<li>FMCSA stopped updating its legacy licensing archive on 2026-05-14. When a docket status comes from that archive, the result says so, and the status describes that date. Confirm current authority with FMCSA before relying on it.</li>
+<li>A flag from the identity screen is a data pattern, not a finding of fraud. In a hand review of flagged clusters, a third were legitimate affiliated fleets. Use it to decide what to look at next.</li>
+<li>This page makes the same free calls as the <a href="../docs/">API</a>, limited to 60 requests a minute per IP address. This page sets no cookies and runs no analytics. The service's own operational logs are covered by the <a href="../privacy/">Privacy Policy</a>.</li>
+</ul>
+<p>To go further, see the <a href="../docs/">API documentation</a>, <a href="../pricing/">pricing</a>, or <a href="../request-key/">request a free evaluation key</a>.</p>
+</main>
+<footer>
+  <p>&copy; 2026 4SAKE Agent Co &middot; <a href="../terms/">Terms of Service</a> &middot; <a href="../privacy/">Privacy Policy</a> &middot; <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a></p>
+  <p>Not affiliated with or endorsed by FMCSA or the US DOT. Underlying data: Federal Motor Carrier Safety Administration, via Data.gov.</p>
+</footer>
+<script>
+(function () {
+  var BASE = "https://fmcsa-mcp-843680657471.us-central1.run.app/x402/";
+
+  function el(tag, text, attrs) {
+    var node = document.createElement(tag);
+    if (text !== undefined && text !== null) node.textContent = text;
+    if (attrs) Object.keys(attrs).forEach(function (k) { node.setAttribute(k, attrs[k]); });
+    return node;
+  }
+  function reset(box, kind) { box.className = "out " + kind; while (box.firstChild) box.removeChild(box.firstChild); }
+  function rows(pairs) {
+    var table = el("table");
+    pairs.forEach(function (pair) {
+      var tr = el("tr");
+      tr.appendChild(el("th", pair[0]));
+      tr.appendChild(el("td", pair[1]));
+      table.appendChild(tr);
+    });
+    return table;
+  }
+  function failure(box, status, body) {
+    reset(box, "err");
+    var message;
+    if (status === 429) message = "Too many requests from your network just now. Wait a minute and try again.";
+    else if (body && body.message) message = body.message;
+    else message = "The lookup is unavailable right now (HTTP " + status + "). Try again shortly.";
+    box.appendChild(el("p", message));
+  }
+  function call(path, box, button, onOk) {
+    button.disabled = true;
+    reset(box, "ok");
+    box.appendChild(el("p", "Looking up…"));
+    fetch(BASE + path, { headers: { "Accept": "application/json" } })
+      .then(function (response) {
+        return response.json().catch(function () { return null; }).then(function (body) {
+          if (response.ok && body) onOk(body); else failure(box, response.status, body);
+        });
+      })
+      .catch(function () { reset(box, "err"); box.appendChild(el("p", "Could not reach the service. Check your connection and try again.")); })
+      .then(function () { button.disabled = false; });
+  }
+  function yesNo(value) { return value === true ? "Yes" : value === false ? "No" : "Not available"; }
+
+  document.getElementById("mcform").addEventListener("submit", function (event) {
+    event.preventDefault();
+    var box = document.getElementById("mcout"), value = document.getElementById("mc").value.trim();
+    if (!value) { reset(box, "err"); box.appendChild(el("p", "Enter an MC, MX or FF number.")); return; }
+    call("find_carrier_by_mc?mc_number=" + encodeURIComponent(value), box, document.getElementById("mcbtn"), function (d) {
+      reset(box, "ok");
+      var asOf = d.provenance && d.provenance.record_as_of ? d.provenance.record_as_of : "not stated";
+      var pairs = [
+        ["Docket", String(d.mc_number)],
+        ["USDOT number", d.authority_holder_usdot_number != null ? String(d.authority_holder_usdot_number) : (d.usdot_numbers || []).join(", ") || "none on file"],
+        ["Docket status", String(d.docket_status || "not stated")],
+        ["Records current as of", asOf]
+      ];
+      box.appendChild(rows(pairs));
+      if (d.status_source === "legacy_li") {
+        box.appendChild(el("p", "This status comes from FMCSA's legacy licensing archive, which FMCSA stopped updating on 2026-05-14. It describes that date. Confirm current authority with FMCSA before relying on it."));
+      }
+      if (d.note) box.appendChild(el("p", String(d.note)));
+      var dot = d.authority_holder_usdot_number != null ? d.authority_holder_usdot_number : (d.usdot_numbers && d.usdot_numbers[0]);
+      if (dot != null) {
+        var p = el("p");
+        var a = el("a", "Look up this carrier's name on FMCSA's SAFER site", { href: "https://safer.fmcsa.dot.gov/query.asp?searchtype=ANY&query_type=queryCarrierSnapshot&query_param=USDOT&query_string=" + encodeURIComponent(String(dot)), rel: "noopener" });
+        p.appendChild(a);
+        box.appendChild(p);
+        var dotInput = document.getElementById("dot");
+        if (!dotInput.value) dotInput.value = String(dot);
+      }
+    });
+  });
+
+  document.getElementById("idform").addEventListener("submit", function (event) {
+    event.preventDefault();
+    var box = document.getElementById("idout"), value = document.getElementById("dot").value.trim();
+    if (!/^[0-9]{1,10}$/.test(value)) { reset(box, "err"); box.appendChild(el("p", "Enter a USDOT number: digits only.")); return; }
+    call("screen_carrier_identity?usdot_number=" + encodeURIComponent(value), box, document.getElementById("idbtn"), function (d) {
+      reset(box, "ok");
+      var s = d.screen || {};
+      var asOf = (d.provenance && d.provenance.record_as_of) || s.record_as_of || "not stated";
+      box.appendChild(rows([
+        ["USDOT number", String(s.usdot_number)],
+        ["Flagged under FMCSA's chameleon-carrier threshold", yesNo(s.flagged)],
+        ["Carriers in its identity cluster", s.cluster_size != null ? String(s.cluster_size) : "Not available"],
+        ["Linked carriers with a motive signal (count)", s.linked_carriers_with_motive != null ? String(s.linked_carriers_with_motive) : "Not available"],
+        ["Records current as of", String(asOf)]
+      ]));
+      if (s.confidence_caveat) box.appendChild(el("p", String(s.confidence_caveat)));
+    });
+  });
+})();
+</script>
+</body>
+</html>

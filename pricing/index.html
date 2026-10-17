@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FMCSA carrier API pricing</title>
+<meta name="description" content="Pay-per-call pricing for FMCSA carrier data: from $0.01 per carrier lookup to $0.10 per dated carrier selection record. Charged only when a call returns records. Free tools and a free $5 evaluation key.">
+<link rel="canonical" href="https://kmcto.github.io/fmcsa-carrier-intelligence/pricing/">
+<link rel="icon" href="../icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FMCSA Carrier Intelligence">
+<meta property="og:title" content="FMCSA carrier API pricing">
+<meta property="og:description" content="From $0.01 per carrier lookup. Charged only when a call returns records. Free tools and a free $5 evaluation key.">
+<meta property="og:url" content="https://kmcto.github.io/fmcsa-carrier-intelligence/pricing/">
+<meta property="og:image" content="https://kmcto.github.io/fmcsa-carrier-intelligence/og.png">
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<header>
+  <a class="home" href="../">FMCSA Carrier Intelligence</a>
+  <nav><a href="../docs/">Docs</a><a href="./">Pricing</a><a href="../lookup/">Free lookup</a><a href="../request-key/">Request a key</a><a href="../for-agents/">For agents</a><a href="../terms/">Terms</a><a href="../privacy/">Privacy</a></nav>
+</header>
+<main>
+<h1>Pricing</h1>
+<p class="meta">Last updated: October 17, 2026. Prices in US dollars per call.</p>
+<p class="lede">You pay only when a call returns records. A carrier that does not exist, a search with zero results, or a service error costs nothing. There is no subscription and no minimum.</p>
+
+<h2>Prices</h2>
+<table>
+<tr><th>Tool</th><th>What you get</th><th>Price</th></tr>
+<tr><td><code>lookup_carrier</code></td><td>A carrier's current profile by USDOT number</td><td>$0.01</td></tr>
+<tr><td><code>check_address_consistency</code></td><td>How many distinct addresses and phones a carrier reports</td><td>$0.01</td></tr>
+<tr><td><code>get_safety_history</code></td><td>Dated snapshots and changes for a carrier</td><td>$0.015</td></tr>
+<tr><td><code>search_carriers</code></td><td>Filtered carrier search, up to 100 rows</td><td>$0.02</td></tr>
+<tr><td><code>get_inspection_crash_summary</code></td><td>Inspection, violation, out-of-service and crash summary</td><td>$0.02</td></tr>
+<tr><td><code>check_broker_authority</code></td><td>Whether a broker holds active broker authority</td><td>$0.05</td></tr>
+<tr><td><code>check_carrier_identity</code></td><td>Identity-linkage detail for one carrier</td><td>$0.05</td></tr>
+<tr><td><code>confirm_identity_link</code></td><td>Whether two carriers you suspect are linked share an identity cluster</td><td>$0.08</td></tr>
+<tr><td><code>get_carrier_selection_record</code></td><td>One dated, hashed record of the public factors in a carrier-vetting file</td><td>$0.10</td></tr>
+<tr><td><code>check_applicant_against_roster</code></td><td>Screens an applicant against your own roster (1 to 100 carriers)</td><td>$0.08 + $0.01 per roster entry. A 10-entry roster costs $0.18.</td></tr>
+<tr><td><code>check_roster_changes</code></td><td>Which carriers on your roster changed since a date (1 to 100 carriers)</td><td>$0.05 + $0.005 per roster entry. A 10-entry roster costs $0.10.</td></tr>
+<tr><td><code>find_carrier_by_mc</code>, <code>screen_carrier_identity</code>, <code>get_catalog</code>, <code>get_sample</code>, <code>get_identity_sample</code>, and <code>GET /verify/&lt;hash&gt;</code></td><td>MC to USDOT lookup, a free identity screen, the catalog, samples, and verification of a selection record</td><td>Free</td></tr>
+</table>
+<p>Roster prices count each distinct USDOT number once. An entry that matches no carrier still counts toward the size, because the price is fixed before the roster is resolved.</p>
+
+<h2>How you pay</h2>
+<h3>API key with prepaid credit</h3>
+<p>The simplest route for a team without a crypto wallet. Your agent or script sends the key on each call, and each charged call is deducted from the credit. <a href="../request-key/">Request a free evaluation key</a>: it comes with <strong>$5 of credit</strong>, about 50 carrier selection records or 500 carrier lookups, and each request is reviewed by hand, usually within one business day. It is for evaluation. Card and invoice payments are not set up yet; if you need one, say so in the request.</p>
+<h3>x402, USDC on Solana, Base or Polygon</h3>
+<p>No account and no key. A paid call without credentials gets an HTTP 402 stating the price, and an x402-capable client pays it from a USDC wallet and retries. Details are on <a href="../for-agents/">For agents</a>.</p>
+
+<h2>What the price does and does not buy</h2>
+<ul>
+<li>Records built from FMCSA's public data, each response dated with the day its records are current as of.</li>
+<li>For about 72% of Active-authority carriers, authority and insurance-on-file fields describe 2026-05-14, because FMCSA stopped updating its legacy archives on that date. Responses say so.</li>
+<li>A record, not a recommendation or a score. Nothing here says a carrier is safe or unsafe, and it is not legal advice or a consumer report.</li>
+</ul>
+<p>See the <a href="../docs/">API documentation</a> for request examples, or try the <a href="../lookup/">free lookup</a>.</p>
+</main>
+<footer>
+  <p>&copy; 2026 4SAKE Agent Co &middot; <a href="../terms/">Terms of Service</a> &middot; <a href="../privacy/">Privacy Policy</a> &middot; <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a></p>
+  <p>Not affiliated with or endorsed by FMCSA or the US DOT. Underlying data: Federal Motor Carrier Safety Administration, via Data.gov.</p>
+</footer>
+</body>
+</html>

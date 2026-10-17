@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FMCSA carrier API documentation</title>
+<meta name="description" content="HTTP API for FMCSA carrier data: authority, insurance filings, inspections, crashes, identity linkage and dated carrier selection records. Curl examples, authentication with an API key, errors and rate limits.">
+<link rel="canonical" href="https://kmcto.github.io/fmcsa-carrier-intelligence/docs/">
+<link rel="icon" href="../icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FMCSA Carrier Intelligence">
+<meta property="og:title" content="FMCSA carrier API documentation">
+<meta property="og:description" content="Curl examples for every endpoint: carrier lookup, broker authority check, inspection and crash summary, identity screen, roster checks and carrier selection records.">
+<meta property="og:url" content="https://kmcto.github.io/fmcsa-carrier-intelligence/docs/">
+<meta property="og:image" content="https://kmcto.github.io/fmcsa-carrier-intelligence/og.png">
+<link rel="stylesheet" href="../style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebAPI","name":"FMCSA Carrier Intelligence API","description":"Carrier authority, insurance filing, inspection, crash and identity-linkage data built from FMCSA public records, over HTTP, MCP and A2A.","url":"https://kmcto.github.io/fmcsa-carrier-intelligence/docs/","documentation":"https://kmcto.github.io/fmcsa-carrier-intelligence/docs/","provider":{"@type":"Organization","name":"4SAKE Agent Co"},"termsOfService":"https://kmcto.github.io/fmcsa-carrier-intelligence/terms/"}
+</script>
+</head>
+<body>
+<header>
+  <a class="home" href="../">FMCSA Carrier Intelligence</a>
+  <nav><a href="./">Docs</a><a href="../pricing/">Pricing</a><a href="../lookup/">Free lookup</a><a href="../request-key/">Request a key</a><a href="../for-agents/">For agents</a><a href="../terms/">Terms</a><a href="../privacy/">Privacy</a></nav>
+</header>
+<main>
+<h1>API documentation</h1>
+<p class="meta">Last updated: October 17, 2026.</p>
+<p class="lede">One HTTP route per tool, JSON in and out. Look up a carrier by USDOT number, check broker authority, pull an inspection and crash summary, screen for identity linkage, or issue a dated carrier selection record. Built from FMCSA's public records.</p>
+
+<h2>Base URL</h2>
+<pre><code>https://fmcsa-mcp-843680657471.us-central1.run.app/x402/&lt;tool&gt;</code></pre>
+<p>Send the tool's arguments as a JSON object in a <code>POST</code> body, or as query parameters on a <code>GET</code> (lists comma-separated). A machine-readable description of every route is at <a href="https://fmcsa-mcp-843680657471.us-central1.run.app/openapi.json"><code>/openapi.json</code></a>.</p>
+
+<h2>Try one now, with no account</h2>
+<p>Turn an MC number from a rate confirmation into a USDOT number. This tool is free.</p>
+<pre><code>curl "https://fmcsa-mcp-843680657471.us-central1.run.app/x402/find_carrier_by_mc?mc_number=MC12892"</code></pre>
+<p>Or use the <a href="../lookup/">free lookup page</a> in your browser.</p>
+
+<h2>Authentication</h2>
+<p>Free tools need nothing. A paid tool accepts either of two ways to pay:</p>
+<ol>
+<li><strong>An API key</strong> with prepaid credit. Send it on every call as <code>Authorization: Bearer fmk_...</code> or <code>X-API-Key: fmk_...</code>. This is the route for teams without a crypto wallet. <a href="../request-key/">Request a free evaluation key</a> ($5 of credit, reviewed by hand).</li>
+<li><strong>x402</strong>, USDC on Solana, Base or Polygon, paid per call with no account. A paid call without a key or payment gets an HTTP 402 stating its price. The payment flow is on <a href="../for-agents/">For agents</a>.</li>
+</ol>
+<p>A call is charged only when it returns records. A USDOT number that does not exist, a search with zero results, or a service error costs nothing. With a key, each response carries <code>x-credit-remaining-atomic</code>, your balance in millionths of a dollar. An unknown or revoked key gets 401. A key with too little credit gets the normal 402, so that call can still be paid with x402.</p>
+
+<h3>A paid call with an API key</h3>
+<pre><code>curl -X POST "https://fmcsa-mcp-843680657471.us-central1.run.app/x402/lookup_carrier" \
+  -H "Authorization: Bearer fmk_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"usdot_number": 2122247}'</code></pre>
+
+<h3>Use a key from an MCP client</h3>
+<pre><code>claude mcp add --transport http fmcsa-carrier https://fmcsa-mcp-843680657471.us-central1.run.app/mcp \
+  --header "Authorization: Bearer fmk_YOUR_KEY"</code></pre>
+<p>In Cursor or another client that reads a JSON config:</p>
+<pre><code>{"mcpServers": {"fmcsa-carrier": {
+  "url": "https://fmcsa-mcp-843680657471.us-central1.run.app/mcp",
+  "headers": {"Authorization": "Bearer fmk_YOUR_KEY"}}}}</code></pre>
+
+<h2>Endpoints</h2>
+<p>Every route is <code>/x402/&lt;tool&gt;</code>. Prices are per call in USD; see <a href="../pricing/">Pricing</a> for the full table.</p>
+<table>
+<tr><th>Tool</th><th>What it answers</th><th>Arguments</th><th>Price</th></tr>
+<tr><td><code>find_carrier_by_mc</code></td><td>The USDOT number behind an MC, MX or FF docket, and the docket's status.</td><td><code>mc_number</code></td><td>Free</td></tr>
+<tr><td><code>screen_carrier_identity</code></td><td>Whether a carrier is flagged under FMCSA's chameleon-carrier methodology, its cluster size, and a count of linked carriers with a motive signal. No member detail.</td><td><code>usdot_number</code></td><td>Free</td></tr>
+<tr><td><code>get_catalog</code>, <code>get_sample</code>, <code>get_identity_sample</code></td><td>Every field and price, and free samples of real responses.</td><td>none</td><td>Free</td></tr>
+<tr><td><code>lookup_carrier</code></td><td>One carrier's current profile: status, authority, insurance-filing flags, out-of-service orders, safety rating and its date.</td><td><code>usdot_number</code></td><td>$0.01</td></tr>
+<tr><td><code>search_carriers</code></td><td>Filtered search (state, safety tier and more). Up to 100 rows per call.</td><td><code>state</code>, <code>safety_tier</code>, <code>limit</code>, more in the catalog</td><td>$0.02</td></tr>
+<tr><td><code>get_safety_history</code></td><td>Dated snapshots and changelog entries for a carrier.</td><td><code>usdot_number</code></td><td>$0.015</td></tr>
+<tr><td><code>get_inspection_crash_summary</code></td><td>Roadside inspection, violation and out-of-service counts and rates, and the trailing 24-month crash summary.</td><td><code>usdot_number</code></td><td>$0.02</td></tr>
+<tr><td><code>check_broker_authority</code></td><td>Whether a broker holds active broker authority, with its dockets and bond-filing status.</td><td><code>mc_number</code> or <code>usdot_number</code></td><td>$0.05</td></tr>
+<tr><td><code>check_carrier_identity</code></td><td>Identity-linkage detail for one carrier: flag, match score, cluster size, motive counts. Never names another carrier.</td><td><code>usdot_number</code></td><td>$0.05</td></tr>
+<tr><td><code>check_address_consistency</code></td><td>How many distinct business addresses and phones a carrier reports across FMCSA's independent records.</td><td><code>usdot_number</code></td><td>$0.01</td></tr>
+<tr><td><code>confirm_identity_link</code></td><td>Whether two carriers you already suspect share an identity cluster.</td><td><code>usdot_number_a</code>, <code>usdot_number_b</code></td><td>$0.08</td></tr>
+<tr><td><code>check_applicant_against_roster</code></td><td>Whether an applicant shares an identity cluster with anyone on your own roster.</td><td><code>usdot_number</code>, <code>roster_usdot_numbers</code></td><td>$0.08 + $0.01 per roster entry</td></tr>
+<tr><td><code>check_roster_changes</code></td><td>Which carriers on your roster changed on or after a date, and what changed.</td><td><code>roster_usdot_numbers</code>, <code>since</code></td><td>$0.05 + $0.005 per roster entry</td></tr>
+<tr><td><code>get_carrier_selection_record</code></td><td>One dated, SHA-256-hashed record of the public factors a broker's carrier-vetting file may cite. Not a score.</td><td><code>usdot_number</code></td><td>$0.10</td></tr>
+</table>
+
+<h2>Examples</h2>
+<h3>Broker authority</h3>
+<pre><code>curl -X POST ".../x402/check_broker_authority" -H "Authorization: Bearer fmk_YOUR_KEY" \
+  -H "Content-Type: application/json" -d '{"mc_number": "MC147039"}'</code></pre>
+<h3>Inspection and crash summary</h3>
+<pre><code>curl -X POST ".../x402/get_inspection_crash_summary" -H "Authorization: Bearer fmk_YOUR_KEY" \
+  -H "Content-Type: application/json" -d '{"usdot_number": 2122247}'</code></pre>
+<h3>Carrier selection record</h3>
+<pre><code>curl -X POST ".../x402/get_carrier_selection_record" -H "Authorization: Bearer fmk_YOUR_KEY" \
+  -H "Content-Type: application/json" -d '{"usdot_number": 2122247}'</code></pre>
+<p>The record carries a SHA-256 hash of its own contents. A free link, <code>GET /verify/&lt;hash&gt;</code>, confirms that we issued exactly that record, when, and for which carrier. We store only the hash and four small facts, never the record. Read <a href="../guides/after-montgomery/">what a carrier-selection file should show</a>.</p>
+<h3>Roster changes</h3>
+<pre><code>curl -X POST ".../x402/check_roster_changes" -H "Authorization: Bearer fmk_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"roster_usdot_numbers": [2122247, 1234567], "since": "2026-09-01"}'</code></pre>
+<p>Rosters take 1 to 100 distinct USDOT numbers. Over the limit is a free error, never a silent truncation.</p>
+
+<h2>Errors</h2>
+<table>
+<tr><th>Status</th><th>Meaning</th><th>Charged</th></tr>
+<tr><td>400 <code>invalid_arguments</code></td><td>The body says what to fix: <code>problems</code>, <code>expected_arguments</code> and a working <code>example</code>.</td><td>No</td></tr>
+<tr><td>401 <code>invalid_api_key</code></td><td>Unknown or revoked key.</td><td>No</td></tr>
+<tr><td>402</td><td>Payment or enough credit needed. The response states the price and how to pay.</td><td>No</td></tr>
+<tr><td>404 <code>not_found</code></td><td>No such carrier or docket.</td><td>No</td></tr>
+<tr><td>429 <code>rate_limited</code></td><td>Over 60 requests a minute from one IP address.</td><td>No</td></tr>
+<tr><td>503</td><td>The key store is unavailable. The call is never served free.</td><td>No</td></tr>
+<tr><td>504 <code>query_timeout</code></td><td>The query timed out.</td><td>No</td></tr>
+</table>
+<p>The full list of error codes is on <a href="../for-agents/">For agents</a>.</p>
+
+<h2>What the data is, and is not</h2>
+<ul>
+<li>Every response states the date its records are current as of (<code>record_as_of</code>). Treat answers as of that date, never as live.</li>
+<li>FMCSA stopped updating its legacy licensing and insurance archives on 2026-05-14. For about 72% of Active-authority carriers, authority and insurance-on-file fields describe that date. These carry the flag <code>authority_status_is_legacy_li_not_motus</code>. Confirm current authority and insurance with FMCSA or the insurer before relying on them.</li>
+<li>"Unrated" means FMCSA has assigned no safety rating. It is not a finding that a carrier is safe or unsafe. Crash counts are a floor, because some crash records carry no USDOT number.</li>
+<li>Identity-linkage fields are data patterns, not findings of fraud. The responses never name or point at another carrier.</li>
+<li>The data describes regulated motor carriers as business entities. It is not a consumer report and must not be used as one. See the <a href="../terms/">Terms</a>.</li>
+</ul>
+<p>Questions, or want a key? <a href="../request-key/">Request a free evaluation key</a>.</p>
+</main>
+<footer>
+  <p>&copy; 2026 4SAKE Agent Co &middot; <a href="../terms/">Terms of Service</a> &middot; <a href="../privacy/">Privacy Policy</a> &middot; <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a></p>
+  <p>Not affiliated with or endorsed by FMCSA or the US DOT. Underlying data: Federal Motor Carrier Safety Administration, via Data.gov.</p>
+</footer>
+</body>
+</html>

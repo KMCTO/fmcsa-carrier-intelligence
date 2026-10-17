@@ -1,11 +1,14 @@
 # FMCSA Carrier Intelligence
 
-> Pay-per-call US motor carrier safety, authority and identity-linkage data built from FMCSA public records, for AI agents. MCP, A2A and plain HTTP endpoints; paid in USDC on Solana, Base or Polygon via x402 v2; no account or API key. Charged only when a call returns records.
+> Pay-per-call US motor carrier safety, authority and identity-linkage data built from FMCSA public records, for AI agents. MCP, A2A and plain HTTP endpoints; paid in USDC on Solana, Base or Polygon via x402 v2; no account needed (or a prepaid API key). Charged only when a call returns records.
 
 Operated by 4SAKE Agent Co. Not affiliated with or endorsed by FMCSA or the US DOT. The data describes regulated motor carriers as business entities and is not a consumer report. It must not be used as a factor in any individual's eligibility for credit, insurance, employment or housing (see Terms).
 
 ## Docs
 
+- [API documentation](https://kmcto.github.io/fmcsa-carrier-intelligence/docs/): curl examples for every endpoint, API-key authentication, errors, rate limits
+- [Pricing](https://kmcto.github.io/fmcsa-carrier-intelligence/pricing/): price per call for every tool, charged only when a call returns records
+- [Free MC to USDOT lookup](https://kmcto.github.io/fmcsa-carrier-intelligence/lookup/): browser page for the free lookup and identity screen
 - [For agents](https://kmcto.github.io/fmcsa-carrier-intelligence/for-agents/): endpoints, x402 payment flow, prices, billable-event rule, rate limits, error codes, examples
 - [Skill](https://kmcto.github.io/fmcsa-carrier-intelligence/SKILL.md): when and how to use each tool
 - [Request a free evaluation API key](https://kmcto.github.io/fmcsa-carrier-intelligence/request-key/): $5 of credit, for people without a crypto wallet; reviewed by hand
