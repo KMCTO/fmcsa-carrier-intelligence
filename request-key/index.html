@@ -64,10 +64,10 @@ button[disabled] { opacity: .6; cursor: default; }
 <h2>What we do with this</h2>
 <p>We use your answers to decide whether to issue a key, to email you the key, and to ask how it is working. We do not sell them or add you to a mailing list. The <a href="../privacy/">Privacy Policy</a> has the details.</p>
 
-<noscript><p>This form needs JavaScript. You can also email <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a> with the same details.</p></noscript>
+<noscript><p>This form needs JavaScript. Contact details are in the <a href="../terms/#contact">Terms</a>.</p></noscript>
 </main>
 <footer>
-  <p>4SAKE Agent Co &middot; <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a> &middot; Not affiliated with or endorsed by FMCSA or the US DOT.</p>
+  <p>4SAKE Agent Co &middot; <a href="../terms/#contact">Contact</a> &middot; Not affiliated with or endorsed by FMCSA or the US DOT.</p>
 </footer>
 <script>
 (function () {
@@ -88,7 +88,7 @@ button[disabled] { opacity: .6; cursor: default; }
         else if (r.status === 429) { show("err", "Too many requests from your network. Please try again later."); }
         else { show("err", r.body.message || "Something went wrong. Please try again, or email us."); }
       })
-      .catch(function () { show("err", "We could not reach the service. Please try again, or email SnarkyMTB@protonmail.com."); })
+      .catch(function () { show("err", "We could not reach the service. Please try again later, or use the contact details in the Terms of Service."); })
       .then(function () { button.disabled = false; });
   });
 })();

@@ -56,11 +56,22 @@
 <h2>Changes</h2>
 <p>We will post any changes to this policy here with a new "Last updated" date.</p>
 
-<h2>Contact</h2>
-<p>4SAKE Agent Co &middot; <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a></p>
+<h2 id="contact">Contact</h2>
+<p>4SAKE Agent Co &middot; <span class="email" data-u="SnarkyMTB" data-d="protonmail.com">the contact address, shown when JavaScript is on</span></p>
 </main>
 <footer>
   <p>4SAKE Agent Co &middot; <a href="../terms/">Terms of Service</a> &middot; Not affiliated with or endorsed by FMCSA or the US DOT.</p>
 </footer>
+<script>
+(function () {
+  var spans = document.querySelectorAll("span.email[data-u][data-d]");
+  for (var i = 0; i < spans.length; i++) {
+    var s = spans[i], address = s.getAttribute("data-u") + "@" + s.getAttribute("data-d");
+    var a = document.createElement("a");
+    a.href = "mailto:" + address; a.textContent = address;
+    s.parentNode.replaceChild(a, s);
+  }
+})();
+</script>
 </body>
 </html>

@@ -66,7 +66,7 @@
 <p>We may give you an API key, with a balance of credit, in place of paying each call with a wallet. Credit is spent on paid tools at the prices in each call's price quote and only when a call returns records, exactly as for a wallet payment. Evaluation credit has no cash value, cannot be transferred or redeemed, and may be used up, withdrawn or ended at any time. You are responsible for keeping your key private and for all use made with it. Tell us right away if it is exposed and we will revoke it. We may refuse a key request for any reason, and may revoke a key for breach of these Terms or misuse. The rest of these Terms, including Sections 6, 7 and 10 to 14, apply to calls made with a key.</p>
 
 <h2>9. Refunds and disputes</h2>
-<p>Blockchain settlements cannot be reversed by us or by you. If you believe you were charged for a call that did not deliver records, were charged the wrong amount, or were charged twice, email <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a> within 30 days of the charge. Include the transaction signature, the paying wallet address and the approximate time of the request. We will check the claim against our records and the blockchain. If we find a charge was made in error, we will refund that amount in USDC to the paying wallet. Refunds are otherwise at our discretion. Our total liability for any billing dispute is limited to the amount of the disputed charges.</p>
+<p>Blockchain settlements cannot be reversed by us or by you. If you believe you were charged for a call that did not deliver records, were charged the wrong amount, or were charged twice, email <span class="email" data-u="SnarkyMTB" data-d="protonmail.com">the contact address, shown when JavaScript is on</span> within 30 days of the charge. Include the transaction signature, the paying wallet address and the approximate time of the request. We will check the claim against our records and the blockchain. If we find a charge was made in error, we will refund that amount in USDC to the paying wallet. Refunds are otherwise at our discretion. Our total liability for any billing dispute is limited to the amount of the disputed charges.</p>
 
 <h2>10. Disclaimer of warranties</h2>
 <p>THE SERVICE AND ALL INFORMATION FROM IT ARE PROVIDED "AS IS" AND "AS AVAILABLE," WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED. THESE INCLUDE ANY WARRANTY OF ACCURACY, COMPLETENESS, TIMELINESS, MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE OR NON-INFRINGEMENT. WE DO NOT WARRANT THAT THE SERVICE WILL BE UNINTERRUPTED, ERROR-FREE OR SECURE, OR THAT ANY CARRIER INFORMATION IS CURRENT OR CORRECT.</p>
@@ -84,11 +84,22 @@
 <h2>14. General</h2>
 <p>These Terms are the entire agreement between you and us about the Service. If any provision is unenforceable, the rest remain in effect. If we fail to enforce a provision, we have not waived it. You may not assign these Terms. We may assign them. Sections 2 through 6 and 9 through 14 survive termination.</p>
 
-<h2>15. Contact</h2>
-<p>4SAKE Agent Co &middot; <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a></p>
+<h2 id="contact">15. Contact</h2>
+<p>4SAKE Agent Co &middot; <span class="email" data-u="SnarkyMTB" data-d="protonmail.com">the contact address, shown when JavaScript is on</span></p>
 </main>
 <footer>
   <p>4SAKE Agent Co &middot; <a href="../privacy/">Privacy Policy</a> &middot; Not affiliated with or endorsed by FMCSA or the US DOT.</p>
 </footer>
+<script>
+(function () {
+  var spans = document.querySelectorAll("span.email[data-u][data-d]");
+  for (var i = 0; i < spans.length; i++) {
+    var s = spans[i], address = s.getAttribute("data-u") + "@" + s.getAttribute("data-d");
+    var a = document.createElement("a");
+    a.href = "mailto:" + address; a.textContent = address;
+    s.parentNode.replaceChild(a, s);
+  }
+})();
+</script>
 </body>
 </html>
