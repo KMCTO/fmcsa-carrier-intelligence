@@ -8,6 +8,7 @@ Operated by 4SAKE Agent Co. Not affiliated with or endorsed by FMCSA or the US D
 
 - [API documentation](https://kmcto.github.io/fmcsa-carrier-intelligence/docs/): curl examples for every endpoint, API-key authentication, errors, rate limits
 - [Pricing](https://kmcto.github.io/fmcsa-carrier-intelligence/pricing/): price per call for every tool, charged only when a call returns records
+- [Run a check](https://kmcto.github.io/fmcsa-carrier-intelligence/check/): browser page for key holders: carrier selection record, broker authority check, inspection and crash summary
 - [Free MC to USDOT lookup](https://kmcto.github.io/fmcsa-carrier-intelligence/lookup/): browser page for the free lookup and identity screen
 - [For agents](https://kmcto.github.io/fmcsa-carrier-intelligence/for-agents/): endpoints, x402 payment flow, prices, billable-event rule, rate limits, error codes, examples
 - [Skill](https://kmcto.github.io/fmcsa-carrier-intelligence/SKILL.md): when and how to use each tool

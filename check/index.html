@@ -1,0 +1,312 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Run a carrier check</title>
+<meta name="description" content="Run a carrier check in your browser with an API key: broker authority, inspection and crash summary, or a dated, hashed carrier selection record from FMCSA public data.">
+<link rel="canonical" href="https://kmcto.github.io/fmcsa-carrier-intelligence/check/">
+<link rel="icon" href="../icon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FMCSA Carrier Intelligence">
+<meta property="og:title" content="Run a carrier check">
+<meta property="og:description" content="Paste your API key, enter a USDOT or MC number, and get a dated carrier selection record, a broker authority check or an inspection and crash summary.">
+<meta property="og:url" content="https://kmcto.github.io/fmcsa-carrier-intelligence/check/">
+<meta property="og:image" content="https://kmcto.github.io/fmcsa-carrier-intelligence/og.png">
+<link rel="stylesheet" href="../style.css">
+<style>
+form { margin: 1rem 0; }
+label { display: block; margin: .9rem 0 .2rem; font-weight: 600; }
+input, select { width: 100%; max-width: 26rem; padding: .5rem; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; }
+fieldset { border: 1px solid var(--rule); border-radius: 4px; margin: 1rem 0 0; padding: .4rem .9rem .7rem; max-width: 34rem; }
+legend { font-weight: 600; padding: 0 .3rem; }
+fieldset label { display: flex; gap: .5rem; align-items: flex-start; font-weight: 400; margin: .45rem 0 0; }
+fieldset input { width: auto; margin-top: .35rem; }
+.inline { display: flex; gap: .5rem; flex-wrap: wrap; align-items: center; max-width: 26rem; }
+.inline select { width: auto; }
+.inline input { flex: 1 1 10rem; width: auto; }
+.remember { display: flex; gap: .5rem; align-items: flex-start; font-weight: 400; margin-top: .5rem; }
+.remember input { width: auto; margin-top: .35rem; }
+button { margin-top: 1.1rem; padding: .55rem 1.2rem; font: inherit; font-weight: 600; color: #fff; background: var(--accent); border: 0; border-radius: 4px; cursor: pointer; }
+button.plain { margin-top: .6rem; margin-right: .5rem; color: var(--fg); background: var(--code-bg); border: 1px solid var(--rule); }
+button[disabled] { opacity: .6; cursor: default; }
+.out { margin-top: 1rem; padding: .75rem 1rem; border-left: 3px solid var(--rule); display: none; }
+.out.ok { border-color: #1a7f37; display: block; }
+.out.err { border-color: #cf222e; display: block; }
+.out table { display: table; }
+.out h2 { margin-top: 1.25rem; }
+.out p, .out ul { margin: .5rem 0; }
+.small { font-size: .85rem; color: var(--muted); }
+.hash { overflow-wrap: anywhere; }
+details pre { max-height: 24rem; overflow: auto; }
+@media print {
+  header, footer, form, .noprint, details { display: none !important; }
+  .out { border: 0; padding: 0; }
+}
+</style>
+</head>
+<body>
+<header>
+  <a class="home" href="../">FMCSA Carrier Intelligence</a>
+  <nav><a href="../docs/">Docs</a><a href="../pricing/">Pricing</a><a href="../lookup/">Free lookup</a><a href="./">Run a check</a><a href="../request-key/">Request a key</a><a href="../for-agents/">For agents</a><a href="../terms/">Terms</a><a href="../privacy/">Privacy</a></nav>
+</header>
+<main>
+<h1>Run a carrier check</h1>
+<p class="meta">Last updated: October 17, 2026.</p>
+<p class="lede">Have an API key? Enter it here, give a USDOT or MC number, and get the result in your browser. No code needed. No key yet? <a href="../request-key/">Request a free evaluation key</a>, which comes with $5 of credit.</p>
+
+<form id="checkform" novalidate>
+  <label for="key">API key</label>
+  <input id="key" name="key" type="password" autocomplete="off" spellcheck="false" placeholder="fmk_..." maxlength="120">
+  <label class="remember"><input id="remember" type="checkbox"> <span>Remember the key in this browser tab only. It is cleared when you close the tab. Leave this off on a shared computer.</span></label>
+
+  <label for="idvalue">Carrier</label>
+  <div class="inline">
+    <select id="idtype" aria-label="Type of number">
+      <option value="usdot">USDOT number</option>
+      <option value="mc">MC number</option>
+    </select>
+    <input id="idvalue" name="idvalue" maxlength="20" autocomplete="off" inputmode="text" placeholder="2122247">
+  </div>
+
+  <fieldset>
+    <legend>Which check?</legend>
+    <label><input type="radio" name="tool" value="get_carrier_selection_record" checked> <span><strong>Carrier selection record</strong> ($0.10). A dated, hashed record of the public factors a carrier-vetting file may cite.</span></label>
+    <label><input type="radio" name="tool" value="check_broker_authority"> <span><strong>Broker authority check</strong> ($0.05). Whether a broker holds active broker authority, with bond and authority history.</span></label>
+    <label><input type="radio" name="tool" value="get_inspection_crash_summary"> <span><strong>Inspection and crash summary</strong> ($0.02). Roadside inspections, violations, out-of-service rates and crashes.</span></label>
+  </fieldset>
+  <p class="small">You are charged only when the check returns records. A number that does not exist costs nothing.</p>
+  <button id="run" type="submit">Run check</button>
+</form>
+<div id="out" class="out" role="status" aria-live="polite"></div>
+
+<h2>About this page</h2>
+<ul>
+<li>Your key goes only to our API, over HTTPS, from your browser. This page has no analytics and sets no cookies. The key is not stored unless you tick the box, and then only for this tab.</li>
+<li>Each result states the date its records are current as of. It is not live. For about 72% of Active-authority carriers, authority and insurance-on-file fields describe 2026-05-14, because FMCSA stopped updating its legacy archive on that date. Results say so when it applies.</li>
+<li>A result is a record of what public data showed, not a score, a recommendation or legal advice, and not a statement that choosing a carrier was reasonable.</li>
+<li>To keep a selection record as evidence, use <strong>Download record</strong>. The hash covers the exact record we issued, so a printout or screenshot cannot be verified later; the downloaded file can, with the free <code>/verify/&lt;hash&gt;</code> link.</li>
+</ul>
+<p>Prefer code? See the <a href="../docs/">API documentation</a>. Prices are on the <a href="../pricing/">pricing page</a>.</p>
+<noscript><p>This page needs JavaScript.</p></noscript>
+</main>
+<footer>
+  <p>&copy; 2026 4SAKE Agent Co &middot; <a href="../terms/">Terms of Service</a> &middot; <a href="../privacy/">Privacy Policy</a> &middot; <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a></p>
+  <p>Not affiliated with or endorsed by FMCSA or the US DOT. Underlying data: Federal Motor Carrier Safety Administration, via Data.gov.</p>
+</footer>
+<script>
+(function () {
+  var HOST = "https://fmcsa-mcp-843680657471.us-central1.run.app";
+  var BASE = HOST + "/x402/";
+  var STORE = "fmcsa_check_key";
+  var form = document.getElementById("checkform"), out = document.getElementById("out"), run = document.getElementById("run");
+  var keyInput = document.getElementById("key"), remember = document.getElementById("remember");
+
+  try { var saved = sessionStorage.getItem(STORE); if (saved) { keyInput.value = saved; remember.checked = true; } } catch (e) {}
+
+  function el(tag, text, attrs) {
+    var node = document.createElement(tag);
+    if (text !== undefined && text !== null) node.textContent = text;
+    if (attrs) Object.keys(attrs).forEach(function (k) { node.setAttribute(k, attrs[k]); });
+    return node;
+  }
+  function reset(kind) { out.className = "out " + kind; while (out.firstChild) out.removeChild(out.firstChild); }
+  function fail(message) { reset("err"); out.appendChild(el("p", message)); }
+  function table(headers, rows) {
+    var t = el("table");
+    if (headers) { var hr = el("tr"); headers.forEach(function (h) { hr.appendChild(el("th", h)); }); t.appendChild(hr); }
+    rows.forEach(function (r) { var tr = el("tr"); r.forEach(function (cell, i) { tr.appendChild(el(headers || i > 0 ? "td" : "th", cell)); }); t.appendChild(tr); });
+    return t;
+  }
+  function show(v) {
+    if (v === null || v === undefined || v === "") return "Not available";
+    if (v === true) return "Yes";
+    if (v === false) return "No";
+    if (Array.isArray(v)) return v.length ? v.map(show).join(", ") : "None";
+    return String(v);
+  }
+  function kv(obj, spec) {
+    obj = obj || {};
+    return table(null, spec.map(function (s) { return [s[0], show(obj[s[1]])]; }));
+  }
+  function list(items) {
+    var ul = el("ul");
+    (items || []).forEach(function (t) { ul.appendChild(el("li", String(t))); });
+    return ul;
+  }
+  function dollars(atomic) { return "$" + (Number(atomic) / 1e6).toFixed(3).replace(/0$/, ""); }
+
+  function post(tool, body, key) {
+    var headers = { "Content-Type": "application/json", "Accept": "application/json" };
+    if (key) headers["Authorization"] = "Bearer " + key;
+    return fetch(BASE + tool, { method: "POST", headers: headers, body: JSON.stringify(body) }).then(function (r) {
+      return r.text().then(function (text) {
+        var parsed = null; try { parsed = JSON.parse(text); } catch (e) {}
+        return { status: r.status, ok: r.ok, text: text, body: parsed, credit: r.headers.get("x-credit-remaining-atomic") };
+      });
+    });
+  }
+  function problem(res) {
+    var b = res.body || {};
+    if (res.status === 401) return "That key is not recognized, or it has been revoked. Check it and try again.";
+    if (res.status === 402) return "There is not enough credit on this key for that check. " + (b.error ? String(b.error) : "") + " You were not charged.";
+    if (res.status === 404) return (b.message ? String(b.message) : "No matching carrier was found.") + " You were not charged.";
+    if (res.status === 429) return "Too many requests from your network just now. Wait a minute and try again.";
+    if (res.status === 503) return "Credit checking is unavailable right now. Try again shortly. You were not charged.";
+    if (res.status === 504) return "The query timed out. Try again. You were not charged.";
+    if (b.message) return String(b.message) + " You were not charged.";
+    return "The check could not be completed (HTTP " + res.status + "). Try again shortly.";
+  }
+
+  function resolveUsdot(type, value) {
+    if (type === "usdot") return Promise.resolve({ usdot: value });
+    return fetch(BASE + "find_carrier_by_mc?mc_number=" + encodeURIComponent(value), { headers: { "Accept": "application/json" } })
+      .then(function (r) { return r.json().catch(function () { return null; }).then(function (b) { return { r: r, b: b }; }); })
+      .then(function (x) {
+        if (x.r.status === 404) return { error: "No carrier is listed under that docket number. You were not charged." };
+        if (!x.r.ok || !x.b) return { error: "The docket lookup is unavailable right now. Try again shortly." };
+        var holder = x.b.authority_holder_usdot_number;
+        if (holder == null && x.b.usdot_numbers && x.b.usdot_numbers.length === 1) holder = x.b.usdot_numbers[0];
+        if (holder == null) return { error: "That docket is listed under more than one carrier and FMCSA's authority records name no holder. Enter a USDOT number instead." };
+        return { usdot: String(holder) };
+      });
+  }
+
+  function footer(res, tool, name) {
+    var parsed = res.body || {};
+    var wrap = el("div", null, { "class": "noprint" });
+    var dl = el("button", "Download result (JSON)", { type: "button", "class": "plain" });
+    dl.addEventListener("click", function () {
+      var blob = new Blob([res.text], { type: "application/json" });
+      var url = URL.createObjectURL(blob);
+      var a = el("a", null, { href: url, download: name });
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    });
+    var pr = el("button", "Print", { type: "button", "class": "plain" });
+    pr.addEventListener("click", function () { window.print(); });
+    wrap.appendChild(dl); wrap.appendChild(pr);
+    out.appendChild(wrap);
+    if (res.credit !== null && res.credit !== undefined && res.credit !== "") {
+      out.appendChild(el("p", "Credit remaining on this key: " + dollars(res.credit) + ".", { "class": "noprint" }));
+    }
+    var d = el("details");
+    d.appendChild(el("summary", "Full response (JSON)"));
+    var pre = el("pre"); pre.appendChild(el("code", res.text));
+    d.appendChild(pre);
+    out.appendChild(d);
+    if (parsed.provenance && parsed.provenance.disclaimer) out.appendChild(el("p", String(parsed.provenance.disclaimer), { "class": "small" }));
+  }
+
+  function renderSelection(res) {
+    var rec = res.body && res.body.record;
+    if (!rec) return fail("The service returned an unexpected answer. You may try again.");
+    var c = rec.carrier || {};
+    reset("ok");
+    out.appendChild(el("h2", "Carrier selection record: USDOT " + show(rec.usdot_number)));
+    out.appendChild(el("p", "Issued " + show(rec.issued_at) + ". A record of what public FMCSA data showed on that date. Not a score or a recommendation."));
+    var h = el("p", null, { "class": "hash" });
+    h.appendChild(document.createTextNode("Record hash: "));
+    h.appendChild(el("code", show(rec.record_hash)));
+    out.appendChild(h);
+    if (rec.verify_url) {
+      var v = el("p");
+      v.appendChild(el("a", "Verify this record (free)", { href: HOST + rec.verify_url, rel: "noopener" }));
+      out.appendChild(v);
+    }
+    out.appendChild(el("h2", "Carrier"));
+    out.appendChild(kv(c, [
+      ["Carrier status", "carrier_status"], ["Authority status", "authority_status"],
+      ["Authority types held now", "active_authority_types"], ["FMCSA safety rating", "safety_rating_fmcsa"],
+      ["Rating date", "safety_rating_date"], ["Active out-of-service orders", "oos_orders_active"],
+      ["BIPD insurance on file", "insurance_bipd_on_file"], ["Cargo insurance on file", "insurance_cargo_on_file"],
+      ["Bond on file", "insurance_bond_on_file"], ["Insurance cancellation pending", "insurance_cancel_pending"],
+      ["Authority ever revoked", "has_been_revoked"], ["Last revocation", "last_revocation_date"],
+      ["Authority ever suspended", "has_been_suspended"], ["Authority granted (first)", "first_authority_granted_date"],
+      ["MCS-150 last filed", "mcs150_last_filed"], ["Power units", "power_units"], ["Drivers", "drivers_total"]
+    ]));
+    var flags = c.data_quality_flags || [];
+    if (flags.indexOf("authority_status_is_legacy_li_not_motus") >= 0) {
+      out.appendChild(el("p", "For this carrier, authority status and the insurance-on-file flags come from FMCSA's legacy archive, which FMCSA stopped updating on 2026-05-14. They describe that date. Confirm current authority and insurance with FMCSA or the insurer before relying on them."));
+    }
+    var asof = rec.data_as_of || {};
+    out.appendChild(el("h2", "How current each part is"));
+    out.appendChild(table(null, Object.keys(asof).map(function (k) { return [k.replace(/_/g, " "), Array.isArray(asof[k]) ? asof[k].join(" to ") : show(asof[k])]; })));
+    out.appendChild(el("h2", "Review factors"));
+    out.appendChild(table(["Factor", "Status", "Note"], (rec.review_factors || []).map(function (f) { return [show(f.factor), show(f.status), f.note ? String(f.note) : ""]; })));
+    if (rec.notes && rec.notes.length) { out.appendChild(el("h2", "Notes")); out.appendChild(list(rec.notes)); }
+    footer(res, "get_carrier_selection_record", "carrier_selection_record_" + show(rec.usdot_number) + "_" + String(rec.record_hash || "").slice(0, 8) + ".json");
+  }
+
+  function renderBroker(res) {
+    var b = res.body && res.body.broker_check;
+    if (!b) return fail("The service returned an unexpected answer. You may try again.");
+    reset("ok");
+    out.appendChild(el("h2", "Broker authority check: USDOT " + show(b.usdot_number)));
+    out.appendChild(table(null, [["Holds active broker authority", show(b.holds_active_broker_authority)], ["Authority status", show(b.authority_status)]]));
+    var dockets = b.broker_dockets || [];
+    if (dockets.length) {
+      out.appendChild(el("h2", "Broker dockets"));
+      out.appendChild(table(["Docket", "Status", "Source", "First granted", "Last event", "Also listed under other carriers"], dockets.map(function (d) {
+        return [show(d.docket_number), show(d.docket_status), show(d.status_source), show(d.first_granted_date), show(d.last_authority_event_date), show(d.also_listed_under_other_carriers)];
+      })));
+    }
+    out.appendChild(el("h2", "Bond or trust filing"));
+    out.appendChild(kv(b.bond, [["Bond on file", "insurance_bond_on_file"], ["Continuous since", "bond_coverage_continuous_since"], ["Current gap (days)", "bond_current_gap_days"], ["Lapses, last 24 months", "bond_lapse_count_24m"], ["Lapses, last 60 months", "bond_lapse_count_60m"], ["Longest gap, last 60 months (days)", "bond_longest_gap_days_60m"], ["Observed through", "bond_data_through"]]));
+    out.appendChild(el("h2", "Authority history"));
+    out.appendChild(kv(b.authority_history, [["Times granted", "granted_count"], ["Times revoked", "revoked_count"], ["Times suspended", "suspended_count"], ["Times reinstated", "reinstated_count"], ["Last event", "last_authority_event_date"], ["Last event type", "last_authority_event_type"], ["Dockets ever held", "docket_count_ever"], ["Observed through", "authority_data_through"]]));
+    if ((b.data_quality_flags || []).indexOf("authority_status_is_legacy_li_not_motus") >= 0) {
+      out.appendChild(el("p", "For this carrier, authority and bond status come from FMCSA's legacy archive, which FMCSA stopped updating on 2026-05-14. They describe that date."));
+    }
+    if (b.notes && b.notes.length) { out.appendChild(el("h2", "Notes")); out.appendChild(list(b.notes)); }
+    footer(res, "check_broker_authority", "broker_authority_" + show(b.usdot_number) + ".json");
+  }
+
+  function renderCrash(res) {
+    var s = res.body && res.body.summary;
+    if (!s) return fail("The service returned an unexpected answer. You may try again.");
+    var i = s.inspections || {}, k = s.crashes || {};
+    reset("ok");
+    out.appendChild(el("h2", "Inspection and crash summary: USDOT " + show(s.usdot_number)));
+    out.appendChild(el("h2", "Roadside inspections"));
+    if ((i.data_quality_flags || []).indexOf("inspection_summary_no_inspections") >= 0) {
+      out.appendChild(el("p", "No roadside inspections in this window. That is the finding; the measures below are blank, not zero."));
+    }
+    out.appendChild(kv(i, [["Inspections", "inspection_count"], ["Driver inspections", "driver_inspection_count"], ["Vehicle inspections", "vehicle_inspection_count"], ["Driver out-of-service rate", "driver_oos_rate"], ["Vehicle out-of-service rate", "vehicle_oos_rate"], ["Last inspection", "last_inspection_date"], ["Violations", "violation_count"], ["Out-of-service violations", "oos_violation_count"], ["Unsafe driving violations", "violations_unsafe_driving"], ["Hours-of-service violations", "violations_hos_compliance"], ["Driver fitness violations", "violations_driver_fitness"], ["Vehicle maintenance violations", "violations_vehicle_maintenance"], ["Window", "window_start"], ["Window ends", "window_end"]]));
+    out.appendChild(el("h2", "Crashes"));
+    out.appendChild(kv(k, [["Crashes", "crash_count"], ["Fatal crashes", "fatal_crash_count"], ["Injury crashes", "injury_crash_count"], ["Tow-away crashes", "tow_away_crash_count"], ["Fatalities", "fatalities_total"], ["Injuries", "injuries_total"], ["Last crash", "last_crash_date"], ["Window", "window_start"], ["Window ends", "window_end"]]));
+    if (s.notes && s.notes.length) { out.appendChild(el("h2", "Notes")); out.appendChild(list(s.notes)); }
+    footer(res, "get_inspection_crash_summary", "inspection_crash_summary_" + show(s.usdot_number) + ".json");
+  }
+
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var key = keyInput.value.trim(), type = document.getElementById("idtype").value, value = document.getElementById("idvalue").value.trim();
+    var tool = form.querySelector('input[name="tool"]:checked').value;
+    if (!/^fmk_[A-Za-z0-9_-]{20,}$/.test(key)) return fail("Enter your API key. It starts with fmk_.");
+    if (type === "usdot" && !/^[0-9]{1,10}$/.test(value)) return fail("Enter a USDOT number: digits only.");
+    if (type === "mc" && !/^(MC|MX|FF)?[ -]?[0-9]{1,8}$/i.test(value)) return fail("Enter an MC number such as MC12892.");
+    try { if (remember.checked) sessionStorage.setItem(STORE, key); else sessionStorage.removeItem(STORE); } catch (e) {}
+
+    run.disabled = true; reset("ok"); out.appendChild(el("p", "Running…"));
+    var go;
+    if (tool === "check_broker_authority") {
+      go = Promise.resolve(type === "usdot" ? { body: { usdot_number: Number(value) } } : { body: { mc_number: value } });
+    } else {
+      go = resolveUsdot(type, value).then(function (r) { return r.error ? r : { body: { usdot_number: Number(r.usdot) } }; });
+    }
+    go.then(function (r) {
+      if (r.error) return fail(r.error);
+      return post(tool, r.body, key).then(function (res) {
+        if (!res.ok) return fail(problem(res));
+        if (tool === "get_carrier_selection_record") renderSelection(res);
+        else if (tool === "check_broker_authority") renderBroker(res);
+        else renderCrash(res);
+      });
+    }).catch(function () { fail("Could not reach the service. Check your connection and try again."); })
+      .then(function () { run.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>
