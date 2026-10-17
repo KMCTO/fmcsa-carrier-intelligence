@@ -11,13 +11,13 @@
 <body>
 <header>
   <a class="home" href="../">FMCSA Carrier Intelligence</a>
-  <nav><a href="../for-agents/">For agents</a><a href="../terms/">Terms</a><a href="./">Privacy</a></nav>
+  <nav><a href="../for-agents/">For agents</a><a href="../request-key/">Request a key</a><a href="../terms/">Terms</a><a href="./">Privacy</a></nav>
 </header>
 <main>
 <h1>Privacy Policy</h1>
-<p class="meta">Last updated: October 14, 2026</p>
+<p class="meta">Last updated: October 17, 2026</p>
 
-<p>This policy explains what 4SAKE Agent Co ("we") collects when you or your agent use FMCSA Carrier Intelligence (the "Service") and this website, and what we do with it. We have no user accounts, so we collect very little.</p>
+<p>This policy explains what 4SAKE Agent Co ("we") collects when you or your agent use FMCSA Carrier Intelligence (the "Service") and this website, and what we do with it. We have no user accounts and collect very little. If you ask for an API key, that is the one time we ask who you are (see below).</p>
 
 <h2>What we collect when you call the Service</h2>
 <ul>
@@ -25,10 +25,11 @@
 <li><strong>Request details.</strong> Which tool you called and the names of the arguments you sent. For paid calls whose payment verified, we also record the argument values, such as the USDOT numbers you looked up.</li>
 <li><strong>Payment details.</strong> For paid calls: your paying wallet address, the amount, the network and the blockchain transaction signature. Payments settle on a public blockchain (Solana, Base or Polygon, whichever you pay on), so the transaction is publicly visible on the blockchain independently of us.</li>
 <li><strong>Carrier selection records.</strong> When you buy a carrier selection record we keep its hash, the time it was issued, the USDOT number and the data as-of date, so the free verify link can confirm it. We do not keep the record's contents or your wallet address in that registry.</li>
+<li><strong>API key requests and keys.</strong> If you ask for an API key through the form on this website, we collect your name, work email, company, role and, if you choose to give it, what you plan to use the key for. We use them only to decide whether to issue a key, to email you the key, to support you and to ask how it is working. We keep them for as long as the key is active and for up to 12 months after the last time it is used or the request is declined, then delete them. If you receive a key, we keep a one-way hash of it (never the key itself), its remaining credit, and when it was last used; calls made with a key are recorded like any other paid call, identified by a short key id. We do not sell this information or use it for a mailing list.</li>
 <li><strong>Outcome.</strong> Whether the call returned records, was free, or failed, and how long it took.</li>
 <li><strong>Messages that aren't tool calls.</strong> If a message to our A2A endpoint contains no tool call (for example a plain-language question), we log its first 200 characters, so we can see what callers are asking for. These are kept with operational logs, not billing records.</li>
 </ul>
-<p>Before a payment verifies, we record only argument <em>names</em>, never values. We do not ask for your name, email address or any account information, and we do not use cookies on the Service.</p>
+<p>Before a payment verifies, we record only argument <em>names</em>, never values. We do not ask for your name, email address or any account information when you simply call the Service, and we do not use cookies on it. The one exception is a request for an API key, described next.</p>
 
 <h2>Why we use it</h2>
 <ul>

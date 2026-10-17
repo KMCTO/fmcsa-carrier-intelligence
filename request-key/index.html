@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Request an API key</title>
+<meta name="description" content="Ask for a free evaluation API key for FMCSA Carrier Intelligence. $5 of credit, reviewed by hand.">
+<link rel="icon" href="../icon.png">
+<link rel="stylesheet" href="../style.css">
+<style>
+form { margin: 1rem 0; }
+label { display: block; margin: .9rem 0 .2rem; font-weight: 600; }
+input, select, textarea { width: 100%; padding: .5rem; font: inherit; color: var(--fg); background: var(--bg); border: 1px solid var(--rule); border-radius: 4px; }
+textarea { min-height: 5rem; }
+.check label { display: flex; gap: .5rem; font-weight: 400; align-items: flex-start; }
+.check input { width: auto; margin-top: .35rem; }
+button { margin-top: 1.1rem; padding: .6rem 1.2rem; font: inherit; font-weight: 600; color: #fff; background: var(--accent); border: 0; border-radius: 4px; cursor: pointer; }
+button[disabled] { opacity: .6; cursor: default; }
+.hp { position: absolute; left: -9999px; height: 0; overflow: hidden; }
+#result { margin-top: 1rem; padding: .75rem 1rem; border-left: 3px solid var(--rule); display: none; }
+#result.ok { border-color: #1a7f37; display: block; }
+#result.err { border-color: #cf222e; display: block; }
+</style>
+</head>
+<body>
+<header>
+  <a class="home" href="../">FMCSA Carrier Intelligence</a>
+  <nav><a href="../for-agents/">For agents</a><a href="../terms/">Terms</a><a href="../privacy/">Privacy</a></nav>
+</header>
+<main>
+<h1>Request an API key</h1>
+<p class="lede">Paying with a card or invoice is not set up yet. If you build or run carrier-vetting tools for a brokerage, shipper or 3PL, ask for a free evaluation key instead.</p>
+
+<p>A key comes with <strong>$5 of credit</strong>, enough for about 50 carrier selection records or 500 carrier lookups. You set it once in your MCP client or send it as a header. A call is charged only when it returns records. We read each request by hand, usually within one business day, and email you the key and how to use it.</p>
+
+<form id="keyform" novalidate>
+  <label for="name">Your name</label>
+  <input id="name" name="name" maxlength="100" autocomplete="name" required>
+  <label for="email">Work email</label>
+  <input id="email" name="email" type="email" maxlength="254" autocomplete="email" required>
+  <label for="company">Company</label>
+  <input id="company" name="company" maxlength="120" autocomplete="organization" required>
+  <label for="role">What best describes you?</label>
+  <select id="role" name="role" required>
+    <option value="">Choose one</option>
+    <option value="broker">Freight broker</option>
+    <option value="shipper">Shipper</option>
+    <option value="3pl">3PL</option>
+    <option value="carrier">Motor carrier</option>
+    <option value="tms_vendor">TMS or onboarding software vendor</option>
+    <option value="ai_builder">Building an AI agent for logistics</option>
+    <option value="other">Something else</option>
+  </select>
+  <label for="use_case">What would you use it for? (optional)</label>
+  <textarea id="use_case" name="use_case" maxlength="600"></textarea>
+  <div class="hp" aria-hidden="true"><label for="website">Leave this empty</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
+  <div class="check"><label><input id="accept" name="accept_terms" type="checkbox" required> <span>I have read the <a href="../terms/">Terms of Service</a> and <a href="../privacy/">Privacy Policy</a>.</span></label></div>
+  <button id="submit" type="submit">Request a key</button>
+  <div id="result" role="status" aria-live="polite"></div>
+</form>
+
+<h2>What we do with this</h2>
+<p>We use your answers to decide whether to issue a key, to email you the key, and to ask how it is working. We do not sell them or add you to a mailing list. The <a href="../privacy/">Privacy Policy</a> has the details.</p>
+
+<noscript><p>This form needs JavaScript. You can also email <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a> with the same details.</p></noscript>
+</main>
+<footer>
+  <p>4SAKE Agent Co &middot; <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a> &middot; Not affiliated with or endorsed by FMCSA or the US DOT.</p>
+</footer>
+<script>
+(function () {
+  var ENDPOINT = "https://fmcsa-mcp-843680657471.us-central1.run.app/keys/request";
+  var form = document.getElementById("keyform"), result = document.getElementById("result"), button = document.getElementById("submit");
+  function show(kind, text) { result.className = kind; result.textContent = text; }
+  form.addEventListener("submit", function (event) {
+    event.preventDefault();
+    var body = {
+      name: form.name.value, email: form.email.value, company: form.company.value, role: form.role.value,
+      use_case: form.use_case.value, website: form.website.value, accept_terms: form.accept_terms.checked
+    };
+    button.disabled = true; show("", "");
+    fetch(ENDPOINT, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().then(function (j) { return { status: r.status, body: j }; }); })
+      .then(function (r) {
+        if (r.status === 202) { form.reset(); show("ok", r.body.message); }
+        else if (r.status === 429) { show("err", "Too many requests from your network. Please try again later."); }
+        else { show("err", r.body.message || "Something went wrong. Please try again, or email us."); }
+      })
+      .catch(function () { show("err", "We could not reach the service. Please try again, or email SnarkyMTB@protonmail.com."); })
+      .then(function () { button.disabled = false; });
+  });
+})();
+</script>
+</body>
+</html>

@@ -11,7 +11,7 @@
 <body>
 <header>
   <a class="home" href="../">FMCSA Carrier Intelligence</a>
-  <nav><a href="./">For agents</a><a href="../terms/">Terms</a><a href="../privacy/">Privacy</a></nav>
+  <nav><a href="./">For agents</a><a href="../request-key/">Request a key</a><a href="../terms/">Terms</a><a href="../privacy/">Privacy</a></nav>
 </header>
 <main>
 <h1>For agents</h1>
@@ -87,6 +87,10 @@
 <p>Two fields are especially time-sensitive. <code>insurance_cancel_pending</code> is true when an insurance cancellation is on file but not yet effective as of <code>record_as_of</code>; it's rare, true for a few dozen carriers. When it's true, compare <code>soonest_cancel_effective_date</code> with today rather than relying on <code>days_to_cancel_effective</code>, which counts from <code>record_as_of</code>. The cancellation may already have taken effect. In <code>get_safety_history</code>, the <code>changelog</code> lists real changes only; it leaves out the entries recorded on the day a field was first tracked.</p>
 
 <p><strong>Older authority and insurance data.</strong> FMCSA stopped updating its legacy licensing and insurance archives on <strong>2026-05-14</strong>. Its live replacement (MOTUS) covers only the carriers FMCSA has moved over so far, about 150,000. For every other carrier, about 72% of Active-authority carriers, <code>authority_status</code> and the <code>insurance_*_on_file</code> flags describe that date, whatever <code>record_as_of</code> says. Those carriers carry the flag <code>authority_status_is_legacy_li_not_motus</code> in <code>data_quality_flags</code>. The insurance continuity and authority history in the selection record and broker check each carry their own <code>data_through</code> date for the same reason. Confirm current authority and insurance with FMCSA or the insurer before relying on them.</p>
+
+<h2>Paying with an API key</h2>
+<p>If you cannot pay with x402, you can ask for a free evaluation key at <a href="../request-key/">the request page</a> ($5 of credit, reviewed by hand). Send it as <code>Authorization: Bearer fmk_...</code> (or <code>X-API-Key</code>) on any call to a paid tool, over MCP, A2A or the plain HTTP routes. The call is charged to the key's credit only when it returns records, at the same price an x402 payment would be. Paid responses carry <code>x-credit-remaining-atomic</code> (1,000,000 is $1). An unknown or revoked key gets HTTP 401 <code>invalid_api_key</code>. A key without enough credit gets the normal 402 payment request, with the reason in <code>error</code>, so you can pay that call with x402 instead. In an MCP client, set the header in the server's config:</p>
+<pre><code>{"mcpServers": {"fmcsa-carrier": {"url": "https://fmcsa-mcp-843680657471.us-central1.run.app/mcp", "headers": {"Authorization": "Bearer fmk_..."}}}}</code></pre>
 
 <h2>Rate limits</h2>
 <ul>
