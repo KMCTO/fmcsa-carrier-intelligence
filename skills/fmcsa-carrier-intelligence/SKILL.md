@@ -1,7 +1,7 @@
 ---
 name: fmcsa-carrier-intelligence
 description: "Vet a US interstate motor carrier by USDOT number before tendering freight: operating authority, insurance filings, out-of-service orders, safety history, and identity-linkage signals that help spot double brokering or a carrier re-registering under a new number. Free tools to try first; paid calls start at $0.01, are paid in USDC on Solana, Base or Polygon via x402, and are charged only when records are returned."
-version: 1.2.0
+version: 1.3.0
 metadata:
   openclaw:
     emoji: "🚛"
@@ -52,7 +52,7 @@ You are charged only when a call returns records. A carrier that isn't found, an
 
 ## How payment works
 
-A paid call made without payment answers HTTP 402 (x402 v2). The challenge is in the `PAYMENT-REQUIRED` response header and says the exact amount, asset, network and payee. Sign a payment for exactly that and repeat the same request with the payload in a `PAYMENT-SIGNATURE` header; any standard x402 client does both steps. On MCP the challenge comes back as a tool result with `isError: true`, and the payment goes in `params._meta["x402/payment"]`. Settlement is USDC on Solana mainnet, Base or Polygon; the payment request lists all three at the same price. A selection record carries a `record_hash`; `GET /verify/<record_hash>` (free) confirms we issued it. It is a record of what the data showed, not a score, and not legal advice.
+A paid call made without payment answers HTTP 402 (x402 v2). The challenge is in the `PAYMENT-REQUIRED` response header and says the exact amount, asset, network and payee. Sign a payment for exactly that and repeat the same request with the payload in a `PAYMENT-SIGNATURE` header; any standard x402 client does both steps. On MCP the challenge comes back as a tool result with `isError: true`, and the payment goes in `params._meta["x402/payment"]`. If the user has no crypto wallet, they can request a free evaluation API key (US$5 of credit) at https://kmcto.github.io/fmcsa-carrier-intelligence/request-key/ and the agent then sends `Authorization: Bearer fmk_...` on paid calls instead of paying per call. Settlement is USDC on Solana mainnet, Base or Polygon; the payment request lists all three at the same price. A selection record carries a `record_hash`; `GET /verify/<record_hash>` (free) confirms we issued it. It is a record of what the data showed, not a score, and not legal advice.
 
 **Spending rules for the agent:**
 - Ask the user before the first paid call. Tell them the price, and keep a running total of what has been spent.

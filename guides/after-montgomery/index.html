@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>After Montgomery: what a carrier-selection file should show</title>
+<meta name="description" content="A plain-language guide for freight brokers and the people who build their tools: what Montgomery v. Caribe Transport II decided, what it left open, and what a documented carrier-selection file should contain.">
+<link rel="icon" href="../../icon.png">
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+<header>
+  <a class="home" href="../../">FMCSA Carrier Intelligence</a>
+  <nav><a href="../../for-agents/">For agents</a><a href="../../request-key/">Request a key</a><a href="../../terms/">Terms</a><a href="../../privacy/">Privacy</a></nav>
+</header>
+<main>
+<h1>After Montgomery: what a carrier-selection file should show</h1>
+<p class="meta">Last updated: October 17, 2026. General information, not legal advice.</p>
+<p class="lede">A plain-language guide for freight brokers and the people who build their tools.</p>
+
+<h2>What the Supreme Court decided</h2>
+<p>On May 14, 2026, in <em>Montgomery v. Caribe Transport II, LLC</em> (No. 24-1238), the Supreme Court held, 9 to 0, that a state-law claim that a freight broker negligently chose a carrier is not blocked by federal law. Justice Barrett wrote that such claims fall within the "safety" exception to the federal preemption of state regulation of brokers (the FAAAA). In the case, the plaintiff alleged that the carrier had a Conditional FMCSA safety rating, with deficiencies in driver qualification, hours of service and crash rate, when the broker hired it.</p>
+
+<h2>What it did not decide</h2>
+<p>It did not decide whether that broker was negligent. It did not set a vetting standard or a checklist, and it did not say which data a broker must review. Two Justices wrote separately that the question was closer than the opinion suggests. So the ruling opens brokers to state-law claims but leaves open what "reasonable care" looks like. That is the question a broker's file will be asked to answer.</p>
+
+<h2>What people say the file needs to show</h2>
+<p>Practitioner commentary since the ruling keeps returning to three things:</p>
+<ol>
+<li><strong>What you checked.</strong> The factors, not just a pass or fail.</li>
+<li><strong>When you checked it.</strong> FMCSA records change; a file showing today's status says nothing about what you saw when you booked the load.</li>
+<li><strong>That it was not edited afterwards.</strong> A record your own team can quietly change is weak evidence.</li>
+</ol>
+<p>One more point from the same commentary: a certificate of insurance collected at onboarding is a snapshot. Insurance is a continuing obligation, so status near the time of the load matters.</p>
+
+<h2>What public FMCSA data can and cannot tell you</h2>
+<ul>
+<li><strong>"Unrated" is not "unsafe", and it is not "safe".</strong> FMCSA assigns a safety rating only after a rated investigation. In our data about 95% of carriers have none. It means "no rating assigned", and the rest of the record has to carry the weight.</li>
+<li><strong>A rating has a date.</strong> More than 53,000 ratings date from the 1980s. Read the date.</li>
+<li><strong>Percentile safety scores for property carriers are not shown publicly.</strong> Under the FAST Act, FMCSA removed alerts and relative percentiles for property carriers from public display. What is public is inspection and violation counts, out-of-service counts and rates, and crash counts.</li>
+<li><strong>Freshness varies by carrier.</strong> FMCSA stopped updating its legacy licensing and insurance archives on May 14, 2026. Its live replacement covers only the carriers it has moved over so far. For the rest, authority and insurance-on-file status describe May 14. Any record you keep should say which it is.</li>
+<li><strong>Crash counts are a floor.</strong> About 19% of crash records carry no USDOT number and cannot be attributed to a carrier.</li>
+</ul>
+
+<h2>A checklist you can adopt today</h2>
+<p>These are the public factors a documented carrier review commonly considers. Whatever tools you use, the file should show each, with a date:</p>
+<ul>
+<li>FMCSA safety rating, and its date (or that there is none)</li>
+<li>USDOT registration status</li>
+<li>Operating authority, and what kind</li>
+<li>Insurance filings on file, pending cancellations, and any history of gaps</li>
+<li>Out-of-service orders</li>
+<li>Roadside inspections, violations and out-of-service rates (and the window they cover)</li>
+<li>Crashes (with the "floor" caveat)</li>
+<li>How long the carrier has held authority, and any revocation, suspension or reinstatement</li>
+<li>Operating classification and cargo</li>
+<li>When the carrier last filed its MCS-150</li>
+<li>Recent changes in the carrier's record</li>
+<li>Identity signals: whether the carrier shares contact identifiers with others</li>
+<li>Anything from the carrier itself (corrective actions, its own documents), which public data does not contain</li>
+</ul>
+
+<h2>How our record maps to it</h2>
+<p>The Carrier Selection Record (<code>get_carrier_selection_record</code>, $0.10) gathers the public factors above in one dated document. It lists each review factor and whether the record carries it, it says plainly when a value is "not assigned", and it carries the freshness caveat for carriers on FMCSA's frozen data. It is not a score and never says a carrier is safe or unsafe.</p>
+<p>Each record carries a SHA-256 hash of its own contents. A free link, <code>/verify/&lt;hash&gt;</code>, confirms that we issued exactly that record, when, and for which carrier. Keep the record; if a copy is ever edited, its hash will not match anything we issued. We store only the hash and four small facts, never the record itself.</p>
+<p>It is a record of what the data showed, not a statement that choosing a carrier was reasonable, and not legal advice.</p>
+<p>The structure looks like this. The values are placeholders, not a real carrier:</p>
+<pre><code>{
+  "record_type": "carrier_selection_record",
+  "usdot_number": 0,
+  "issued_at": "2026-10-17T14:02:11.482913+00:00",
+  "data_as_of": { "carrier_profile": "2026-10-15", "inspection_window": ["2024-08-28", "2026-08-27"] },
+  "review_factors": [
+    { "factor": "FMCSA safety rating", "status": "not_assigned",
+      "note": "Unrated means FMCSA has assigned no rating. It is not a finding that the carrier is safe or unsafe." }
+  ],
+  "record_hash": "sha256 of the record's canonical JSON"
+}</code></pre>
+
+<h2>Try it</h2>
+<p>The free tools need no account: <code>find_carrier_by_mc</code> turns an MC number into a USDOT number, and <code>screen_carrier_identity</code> gives a free identity screen. Paid tools are paid per call with x402, or you can <a href="../../request-key/">request a free evaluation API key</a> ($5 of credit) if you do not use a crypto wallet. Endpoints and the full tool list are on the <a href="../../for-agents/">For agents</a> page.</p>
+
+<h2>Sources</h2>
+<ul>
+<li><a href="https://www.scotusblog.com/2026/05/court-rules-freight-brokers-can-face-negligent-hiring-suits-under-state-law/">SCOTUSblog: Court rules freight brokers can face negligent hiring suits under state law</a></li>
+<li><a href="https://trucksafe.com/post/montgomery-v-caribe-scotus-csa-score-broker-vetting">Trucksafe: what brokers can and cannot see in CSA data</a></li>
+<li><a href="https://dotscreener.com/blog/post-montgomery-carrier-vetting-checklist-negligent-selection">DOTScreener: post-Montgomery carrier vetting checklist</a></li>
+<li><a href="https://www.fmcsa.dot.gov/fastact/csa">FMCSA: the FAST Act and CSA public display</a></li>
+</ul>
+<p class="meta">We are not lawyers. This page summarizes public reporting and describes our own product. Talk to counsel about your own obligations.</p>
+</main>
+<footer>
+  <p>4SAKE Agent Co &middot; <a href="mailto:SnarkyMTB@protonmail.com">SnarkyMTB@protonmail.com</a> &middot; Not affiliated with or endorsed by FMCSA or the US DOT.</p>
+</footer>
+</body>
+</html>

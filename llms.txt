@@ -8,6 +8,8 @@ Operated by 4SAKE Agent Co. Not affiliated with or endorsed by FMCSA or the US D
 
 - [For agents](https://kmcto.github.io/fmcsa-carrier-intelligence/for-agents/): endpoints, x402 payment flow, prices, billable-event rule, rate limits, error codes, examples
 - [Skill](https://kmcto.github.io/fmcsa-carrier-intelligence/SKILL.md): when and how to use each tool
+- [Request a free evaluation API key](https://kmcto.github.io/fmcsa-carrier-intelligence/request-key/): $5 of credit, for people without a crypto wallet; reviewed by hand
+- [After Montgomery: what a carrier-selection file should show](https://kmcto.github.io/fmcsa-carrier-intelligence/guides/after-montgomery/)
 - [Terms of Service](https://kmcto.github.io/fmcsa-carrier-intelligence/terms/)
 - [Privacy Policy](https://kmcto.github.io/fmcsa-carrier-intelligence/privacy/)
 
