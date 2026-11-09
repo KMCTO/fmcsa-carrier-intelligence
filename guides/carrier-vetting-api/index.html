@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carrier vetting API quickstart for TMS and broker tools</title>
+<meta name="description" content="Add FMCSA carrier checks to a TMS or onboarding flow: MC to USDOT, authority, inspections, identity screen and a hashed selection record. curl examples and costs.">
+<link rel="canonical" href="https://kmcto.github.io/fmcsa-carrier-intelligence/guides/carrier-vetting-api/">
+<link rel="icon" type="image/svg+xml" href="../../logo.svg">
+<link rel="icon" href="../../icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="FMCSA Carrier Intelligence">
+<meta property="og:title" content="Carrier vetting API quickstart for TMS and broker tools">
+<meta property="og:description" content="Add FMCSA carrier checks to a TMS or onboarding flow: MC to USDOT, authority, inspections, identity screen and a hashed selection record. curl examples and costs.">
+<meta property="og:url" content="https://kmcto.github.io/fmcsa-carrier-intelligence/guides/carrier-vetting-api/">
+<meta property="og:image" content="https://kmcto.github.io/fmcsa-carrier-intelligence/og.png?v=2">
+<link rel="stylesheet" href="../../style.css">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Article", "headline": "Carrier vetting API quickstart for TMS and broker tools", "description": "Add FMCSA carrier checks to a TMS or onboarding flow: MC to USDOT, authority, inspections, identity screen and a hashed selection record. curl examples and costs.", "datePublished": "2026-11-09", "dateModified": "2026-11-09", "mainEntityOfPage": "https://kmcto.github.io/fmcsa-carrier-intelligence/guides/carrier-vetting-api/", "author": {"@type": "Organization", "name": "4SAKE Agent Co"}, "publisher": {"@type": "Organization", "name": "4SAKE Agent Co"}, "audience": {"@type": "Audience", "audienceType": "Developers building TMS, onboarding or broker vetting tools"}}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does a carrier vetting check cost?", "acceptedAnswer": {"@type": "Answer", "text": "From $0.01 per call. A five-call flow with MC lookup, identity screen, carrier profile, inspection and crash summary and a hashed selection record costs $0.13 in total. You are charged only when a call returns records."}}, {"@type": "Question", "name": "Do I need a crypto wallet?", "acceptedAnswer": {"@type": "Answer", "text": "No. Request a free evaluation API key with $5 of prepaid credit and send it as a Bearer token. Wallet payment with USDC through x402 is also supported."}}, {"@type": "Question", "name": "What data does the API use?", "acceptedAnswer": {"@type": "Answer", "text": "FMCSA public records. Every response states the date its records are current as of. Authority and insurance fields for many carriers come from an FMCSA archive that stopped updating on May 14, 2026, and those records are flagged."}}, {"@type": "Question", "name": "Is there an OpenAPI description?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, at the service host under /openapi.json, with one route per tool."}}]}
+</script>
+</head>
+<body>
+<header>
+  <a class="home" href="../../"><img src="../../logo.svg" alt="" width="30" height="30"><span>FMCSA Carrier Intelligence</span></a>
+  <nav><a href="../../docs/">Docs</a><a href="../../pricing/">Pricing</a><a href="../../guides/">Guides</a><a href="../../lookup/">Free lookup</a><a href="../../check/">Run a check</a><a href="../../request-key/">Request a key</a><a href="../../for-agents/">For agents</a><a href="../../terms/">Terms</a><a href="../../privacy/">Privacy</a></nav>
+</header>
+<main>
+<h1>Carrier vetting API quickstart for TMS and broker tools</h1>
+<p class="meta">Last updated: November 9, 2026. General information, not legal advice.</p>
+<p class="lede">One HTTP route per check, JSON in and out, prepaid credit or x402. Here is a five-call vetting flow with real request shapes and what it costs.</p>
+<h2>The flow</h2>
+<table>
+<tr><th>Step</th><th>Call</th><th>Cost</th></tr>
+<tr><td>1. MC number to USDOT</td><td><code>find_carrier_by_mc</code></td><td>Free</td></tr>
+<tr><td>2. Identity screen</td><td><code>screen_carrier_identity</code></td><td>Free</td></tr>
+<tr><td>3. Profile: status, authority, insurance flags, safety rating and date</td><td><code>lookup_carrier</code></td><td>$0.01</td></tr>
+<tr><td>4. Inspections, violations, out-of-service rates, crashes</td><td><code>get_inspection_crash_summary</code></td><td>$0.02</td></tr>
+<tr><td>5. A dated, hashed record of the factors for your file</td><td><code>get_carrier_selection_record</code></td><td>$0.10</td></tr>
+</table>
+<p>All five calls cost $0.13 in total. A call is charged only when it returns records: an unknown carrier, an empty search or a service error is free. See <a href="../../pricing/">pricing</a> for every tool.</p>
+
+<h2>1. Free calls first</h2>
+<pre><code>curl "https://fmcsa-mcp-843680657471.us-central1.run.app/x402/find_carrier_by_mc?mc_number=MC12892"
+curl "https://fmcsa-mcp-843680657471.us-central1.run.app/x402/screen_carrier_identity?usdot_number=2122247"</code></pre>
+<p>The first returns <code>authority_holder_usdot_number</code>, <code>docket_status</code> and the records' as-of date. The second returns <code>flagged</code>, <code>cluster_size</code> and counts, never another carrier's identity.</p>
+
+<h2>2. Paid calls with an API key</h2>
+<p><a href="../../request-key/">Request a free evaluation key</a>: $5 of credit, reviewed by hand. Send it on each call.</p>
+<pre><code>curl -X POST "https://fmcsa-mcp-843680657471.us-central1.run.app/x402/lookup_carrier" \
+  -H "Authorization: Bearer fmk_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"usdot_number": 2122247}'</code></pre>
+<p>Each response carries <code>x-credit-remaining-atomic</code>, your balance in millionths of a dollar. No wallet is needed with a key. To pay with USDC through x402 instead, an unpaid call returns HTTP 402 stating the price; see <a href="../../for-agents/">For agents</a>.</p>
+
+<h2>3. The record for your file</h2>
+<pre><code>curl -X POST "https://fmcsa-mcp-843680657471.us-central1.run.app/x402/get_carrier_selection_record" \
+  -H "Authorization: Bearer fmk_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"usdot_number": 2122247}'</code></pre>
+<p>The record is dated and carries a SHA-256 hash of its own contents. <code>GET /verify/&lt;hash&gt;</code> is free and confirms we issued exactly that record, when, and for which carrier. We store only the hash and four small facts. It is a record of what the public data showed, not a score and not a recommendation; see <a href="../after-montgomery/">what a carrier-selection file should show</a>.</p>
+
+<h2>4. Re-checking a roster</h2>
+<pre><code>curl -X POST "https://fmcsa-mcp-843680657471.us-central1.run.app/x402/check_roster_changes" \
+  -H "Authorization: Bearer fmk_YOUR_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"roster_usdot_numbers": [2122247, 1234567], "since": "2026-10-01"}'</code></pre>
+<p>Returns which carriers on your roster changed since a date, and what changed. A roster takes 1 to 100 USDOT numbers: $0.05 plus $0.005 per entry.</p>
+
+<h2>What to build around</h2>
+<ul>
+<li><strong>Treat every answer as dated.</strong> Store <code>record_as_of</code> with whatever you keep.</li>
+<li><strong>Handle the freshness flag.</strong> For carriers flagged <code>authority_status_is_legacy_li_not_motus</code>, authority and insurance fields describe May 14, 2026. See <a href="../fmcsa-data-freeze/">the freeze explained</a>.</li>
+<li><strong>Errors are explicit.</strong> A 400 says what to fix and includes a working example. Rate limit: 60 requests a minute per IP address.</li>
+<li><strong>Machine-readable description:</strong> <a href="https://fmcsa-mcp-843680657471.us-central1.run.app/openapi.json">OpenAPI</a>. MCP, A2A and the full tool list are in the <a href="../../docs/">API documentation</a>.</li>
+</ul>
+
+<h2>Common questions</h2>
+<h3>How much does a carrier vetting check cost?</h3>
+<p>From $0.01 per call. A five-call flow with MC lookup, identity screen, carrier profile, inspection and crash summary and a hashed selection record costs $0.13 in total. You are charged only when a call returns records.</p>
+<h3>Do I need a crypto wallet?</h3>
+<p>No. Request a free evaluation API key with $5 of prepaid credit and send it as a Bearer token. Wallet payment with USDC through x402 is also supported.</p>
+<h3>What data does the API use?</h3>
+<p>FMCSA public records. Every response states the date its records are current as of. Authority and insurance fields for many carriers come from an FMCSA archive that stopped updating on May 14, 2026, and those records are flagged.</p>
+<h3>Is there an OpenAPI description?</h3>
+<p>Yes, at the service host under /openapi.json, with one route per tool.</p>
+</main>
+<footer>
+  <p>&copy; 2026 4SAKE Agent Co &middot; <a href="../../terms/">Terms of Service</a> &middot; <a href="../../privacy/">Privacy Policy</a> &middot; <a href="../../terms/#contact">Contact</a></p>
+  <p>Not affiliated with or endorsed by FMCSA or the US DOT. Underlying data: Federal Motor Carrier Safety Administration, via Data.gov.</p>
+</footer>
+</body>
+</html>

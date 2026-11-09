@@ -14,6 +14,11 @@ Operated by 4SAKE Agent Co. Not affiliated with or endorsed by FMCSA or the US D
 - [Skill](https://kmcto.github.io/fmcsa-carrier-intelligence/SKILL.md): when and how to use each tool
 - [Request a free evaluation API key](https://kmcto.github.io/fmcsa-carrier-intelligence/request-key/): $5 of credit, for people without a crypto wallet; reviewed by hand
 - [After Montgomery: what a carrier-selection file should show](https://kmcto.github.io/fmcsa-carrier-intelligence/guides/after-montgomery/)
+- [Guides index](https://kmcto.github.io/fmcsa-carrier-intelligence/guides/)
+- [How to find a USDOT number from an MC number](https://kmcto.github.io/fmcsa-carrier-intelligence/guides/mc-number-to-usdot-number/)
+- [Chameleon carriers: what they are and how to check for one](https://kmcto.github.io/fmcsa-carrier-intelligence/guides/chameleon-carriers/)
+- [FMCSA stopped updating authority and insurance files on 2026-05-14](https://kmcto.github.io/fmcsa-carrier-intelligence/guides/fmcsa-data-freeze/)
+- [Carrier vetting API quickstart](https://kmcto.github.io/fmcsa-carrier-intelligence/guides/carrier-vetting-api/)
 - [Terms of Service](https://kmcto.github.io/fmcsa-carrier-intelligence/terms/)
 - [Privacy Policy](https://kmcto.github.io/fmcsa-carrier-intelligence/privacy/)
 

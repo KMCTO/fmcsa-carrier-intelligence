@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FMCSA stopped updating carrier authority and insurance files</title>
+<meta name="description" content="FMCSA froze its legacy authority and insurance archives on May 14, 2026. What stopped updating, what still updates, who is affected, and what to check before you tender a load.">
+<link rel="canonical" href="https://kmcto.github.io/fmcsa-carrier-intelligence/guides/fmcsa-data-freeze/">
+<link rel="icon" type="image/svg+xml" href="../../logo.svg">
+<link rel="icon" href="../../icon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="FMCSA Carrier Intelligence">
+<meta property="og:title" content="FMCSA stopped updating carrier authority and insurance files">
+<meta property="og:description" content="FMCSA froze its legacy authority and insurance archives on May 14, 2026. What stopped updating, what still updates, who is affected, and what to check before you tender a load.">
+<meta property="og:url" content="https://kmcto.github.io/fmcsa-carrier-intelligence/guides/fmcsa-data-freeze/">
+<meta property="og:image" content="https://kmcto.github.io/fmcsa-carrier-intelligence/og.png?v=2">
+<link rel="stylesheet" href="../../style.css">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Article", "headline": "FMCSA stopped updating its carrier authority and insurance files on May 14, 2026", "description": "FMCSA froze its legacy authority and insurance archives on May 14, 2026. What stopped updating, what still updates, who is affected, and what to check before you tender a load.", "datePublished": "2026-11-09", "dateModified": "2026-11-09", "mainEntityOfPage": "https://kmcto.github.io/fmcsa-carrier-intelligence/guides/fmcsa-data-freeze/", "author": {"@type": "Organization", "name": "4SAKE Agent Co"}, "publisher": {"@type": "Organization", "name": "4SAKE Agent Co"}, "audience": {"@type": "Audience", "audienceType": "Freight brokers, shippers and carrier-onboarding staff"}}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Did FMCSA really stop updating carrier authority and insurance data?", "acceptedAnswer": {"@type": "Answer", "text": "FMCSA's dataset notes say its Carrier, InsHist, ActPendInsur, Rejected, Revocation, AuthHist, BOC-3 and Insur files were last refreshed on 05/14/2026 and will no longer be updated. The census, crash and inspection files and the new MOTUS platform continue to update."}}, {"@type": "Question", "name": "How many carriers are affected?", "acceptedAnswer": {"@type": "Answer", "text": "In our data about 72% of carriers with Active operating authority, roughly 1.57 million, are not yet on FMCSA's new MOTUS platform, so their authority and insurance-on-file fields describe May 14, 2026."}}, {"@type": "Question", "name": "How do I check a carrier's current authority and insurance?", "acceptedAnswer": {"@type": "Answer", "text": "Use FMCSA's licensing and insurance site directly or ask the insurer, and ask the carrier for a current certificate of insurance. Keep a dated record of what you checked and where."}}, {"@type": "Question", "name": "Is the data on this site live?", "acceptedAnswer": {"@type": "Answer", "text": "No. Each response states the date its records are current as of, and records still based on the frozen archive are flagged and say so."}}]}
+</script>
+</head>
+<body>
+<header>
+  <a class="home" href="../../"><img src="../../logo.svg" alt="" width="30" height="30"><span>FMCSA Carrier Intelligence</span></a>
+  <nav><a href="../../docs/">Docs</a><a href="../../pricing/">Pricing</a><a href="../../guides/">Guides</a><a href="../../lookup/">Free lookup</a><a href="../../check/">Run a check</a><a href="../../request-key/">Request a key</a><a href="../../for-agents/">For agents</a><a href="../../terms/">Terms</a><a href="../../privacy/">Privacy</a></nav>
+</header>
+<main>
+<h1>FMCSA stopped updating its carrier authority and insurance files on May 14, 2026</h1>
+<p class="meta">Last updated: November 9, 2026. General information, not legal advice.</p>
+<p class="lede">If a carrier's authority or insurance status in a data feed looks fine, it may describe May 14. Here is what changed, how many carriers are affected, and what to do about it.</p>
+<h2>What FMCSA stopped updating</h2>
+<p>FMCSA's own notes on its public datasets say that the Carrier, InsHist, ActPendInsur, Rejected, Revocation, AuthHist, BOC-3 and Insur files were "last refreshed on 05/14/2026 and will no longer be updated". Together they carry operating-authority status, insurance filings and their history, revocations and cancellations. FMCSA's licensing system moved to a new platform, called MOTUS, starting in May 2026.</p>
+
+<h2>What still updates</h2>
+<ul>
+<li>The carrier census, which holds registration details and USDOT status.</li>
+<li>Crash records and the roadside inspection files.</li>
+<li>Everything on the new MOTUS platform.</li>
+</ul>
+<p>MOTUS covers only the dockets FMCSA has moved onto it so far. In mid-October 2026 that was about 150,000 carriers, growing by roughly 10,000 dockets a month.</p>
+
+<h2>Who is affected</h2>
+<p>In our data, about 72% of carriers with Active operating authority, roughly 1.57 million, are not yet on MOTUS. For them, authority status and insurance-on-file fields describe May 14, 2026, whatever date the feed or website shows. A carrier whose authority was revoked, or whose insurance was cancelled, after May 14 can still look fine in the frozen files.</p>
+
+<h2>What to do before you tender a load</h2>
+<ol>
+<li><strong>Look at the as-of date, per carrier.</strong> A single "last updated" date on a vendor's site does not tell you which fields are frozen for which carriers.</li>
+<li><strong>Confirm current authority and insurance directly</strong> with FMCSA's <a href="https://li-public.fmcsa.dot.gov/LIVIEW/pkg_carrquery.prc_carrlist">licensing and insurance site</a> or with the insurer, especially for a carrier you have not used before.</li>
+<li><strong>Treat the certificate of insurance as a snapshot.</strong> Ask for a current one when the load is near.</li>
+<li><strong>Keep a dated record of what you checked,</strong> including which source you used. See <a href="../after-montgomery/">what a carrier-selection file should show</a>.</li>
+<li><strong>Ask your data vendor how it handles the freeze.</strong> A feed that silently shows May 14 data as current is a risk you would be carrying without knowing it.</li>
+</ol>
+
+<h2>How this service handles it</h2>
+<p>Every response carries the date its records are current as of. For carriers whose authority or insurance status still comes from the frozen archive, the record is flagged <code>authority_status_is_legacy_li_not_motus</code> and states in plain words that the status describes May 14, 2026. We do not describe authority or insurance as current for those carriers. Try the <a href="../../lookup/">free lookup</a>: the result tells you which source its status came from.</p>
+
+<h2>Common questions</h2>
+<h3>Did FMCSA really stop updating carrier authority and insurance data?</h3>
+<p>FMCSA&#x27;s dataset notes say its Carrier, InsHist, ActPendInsur, Rejected, Revocation, AuthHist, BOC-3 and Insur files were last refreshed on 05/14/2026 and will no longer be updated. The census, crash and inspection files and the new MOTUS platform continue to update.</p>
+<h3>How many carriers are affected?</h3>
+<p>In our data about 72% of carriers with Active operating authority, roughly 1.57 million, are not yet on FMCSA&#x27;s new MOTUS platform, so their authority and insurance-on-file fields describe May 14, 2026.</p>
+<h3>How do I check a carrier&#x27;s current authority and insurance?</h3>
+<p>Use FMCSA&#x27;s licensing and insurance site directly or ask the insurer, and ask the carrier for a current certificate of insurance. Keep a dated record of what you checked and where.</p>
+<h3>Is the data on this site live?</h3>
+<p>No. Each response states the date its records are current as of, and records still based on the frozen archive are flagged and say so.</p>
+</main>
+<footer>
+  <p>&copy; 2026 4SAKE Agent Co &middot; <a href="../../terms/">Terms of Service</a> &middot; <a href="../../privacy/">Privacy Policy</a> &middot; <a href="../../terms/#contact">Contact</a></p>
+  <p>Not affiliated with or endorsed by FMCSA or the US DOT. Underlying data: Federal Motor Carrier Safety Administration, via Data.gov.</p>
+</footer>
+</body>
+</html>

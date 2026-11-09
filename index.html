@@ -22,11 +22,17 @@
 <meta name="twitter:image" content="https://kmcto.github.io/fmcsa-carrier-intelligence/og.png?v=2">
 <link rel="canonical" href="https://kmcto.github.io/fmcsa-carrier-intelligence/">
 <link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "Organization", "name": "4SAKE Agent Co", "url": "https://kmcto.github.io/fmcsa-carrier-intelligence/", "logo": "https://kmcto.github.io/fmcsa-carrier-intelligence/logo.svg", "description": "Operates FMCSA Carrier Intelligence, a pay-per-call carrier vetting data service built from FMCSA public records."}
+</script>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "WebSite", "name": "FMCSA Carrier Intelligence", "url": "https://kmcto.github.io/fmcsa-carrier-intelligence/", "publisher": {"@type": "Organization", "name": "4SAKE Agent Co"}}
+</script>
 </head>
 <body>
 <header>
   <a class="home" href="./"><img src="logo.svg" alt="" width="30" height="30"><span>FMCSA Carrier Intelligence</span></a>
-  <nav><a href="docs/">Docs</a><a href="pricing/">Pricing</a><a href="lookup/">Free lookup</a><a href="check/">Run a check</a><a href="request-key/">Request a key</a><a href="for-agents/">For agents</a><a href="terms/">Terms</a><a href="privacy/">Privacy</a></nav>
+  <nav><a href="docs/">Docs</a><a href="pricing/">Pricing</a><a href="guides/">Guides</a><a href="lookup/">Free lookup</a><a href="check/">Run a check</a><a href="request-key/">Request a key</a><a href="for-agents/">For agents</a><a href="terms/">Terms</a><a href="privacy/">Privacy</a></nav>
 </header>
 <section class="hero">
 <h1>Carrier vetting data from FMCSA records, dated and verifiable</h1>
@@ -52,6 +58,15 @@
 <li><strong>Get access</strong><a href="request-key/">Request a free evaluation key</a> with $5 of credit, or pay per call in USDC with <a href="https://www.x402.org/">x402</a>. No wallet needed with a key.</li>
 <li><strong>Run checks or connect an agent</strong>Run checks in your browser on <a href="check/">Run a check</a>, call the <a href="docs/">HTTP API</a>, or add the MCP server to Claude, Cursor or another client.</li>
 </ol>
+
+<h2>Guides</h2>
+<ul>
+<li><a href="guides/mc-number-to-usdot-number/">How to find a USDOT number from an MC number</a></li>
+<li><a href="guides/chameleon-carriers/">Chameleon carriers: what they are and how to check for one</a></li>
+<li><a href="guides/fmcsa-data-freeze/">FMCSA stopped updating authority and insurance files on May 14, 2026</a></li>
+<li><a href="guides/after-montgomery/">After Montgomery: what a carrier-selection file should show</a></li>
+<li><a href="guides/carrier-vetting-api/">Carrier vetting API quickstart for TMS and broker tools</a></li>
+</ul>
 
 <h2>Pricing</h2>
 <p>From $0.01 per call. You pay only when a call returns records. A carrier that doesn't exist, a search with zero results, or a service error is served free.</p>
