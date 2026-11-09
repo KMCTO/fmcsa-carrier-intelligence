@@ -5,7 +5,7 @@ version: 1.3.0
 metadata:
   openclaw:
     emoji: "🚛"
-    homepage: https://kmcto.github.io/fmcsa-carrier-intelligence/
+    homepage: https://carriers.4sakeco.com/
     requires:
       anyBins:
         - curl
@@ -19,7 +19,7 @@ Pay-per-call data on US motor carriers, built from FMCSA public records. It answ
   - MCP: `https://fmcsa-mcp-843680657471.us-central1.run.app/mcp`
   - Plain HTTP: `https://fmcsa-mcp-843680657471.us-central1.run.app/x402/<tool>` (OpenAPI at `/openapi.json` on that host)
   - A2A: `https://fmcsa-a2a-843680657471.us-central1.run.app/`
-- Full reference: https://kmcto.github.io/fmcsa-carrier-intelligence/for-agents/
+- Full reference: https://carriers.4sakeco.com/for-agents/
 
 ## Start free
 
@@ -52,7 +52,7 @@ You are charged only when a call returns records. A carrier that isn't found, an
 
 ## How payment works
 
-A paid call made without payment answers HTTP 402 (x402 v2). The challenge is in the `PAYMENT-REQUIRED` response header and says the exact amount, asset, network and payee. Sign a payment for exactly that and repeat the same request with the payload in a `PAYMENT-SIGNATURE` header; any standard x402 client does both steps. On MCP the challenge comes back as a tool result with `isError: true`, and the payment goes in `params._meta["x402/payment"]`. If the user has no crypto wallet, they can request a free evaluation API key (US$5 of credit) at https://kmcto.github.io/fmcsa-carrier-intelligence/request-key/ and the agent then sends `Authorization: Bearer fmk_...` on paid calls instead of paying per call. Settlement is USDC on Solana mainnet, Base or Polygon; the payment request lists all three at the same price. A selection record carries a `record_hash`; `GET /verify/<record_hash>` (free) confirms we issued it. It is a record of what the data showed, not a score, and not legal advice.
+A paid call made without payment answers HTTP 402 (x402 v2). The challenge is in the `PAYMENT-REQUIRED` response header and says the exact amount, asset, network and payee. Sign a payment for exactly that and repeat the same request with the payload in a `PAYMENT-SIGNATURE` header; any standard x402 client does both steps. On MCP the challenge comes back as a tool result with `isError: true`, and the payment goes in `params._meta["x402/payment"]`. If the user has no crypto wallet, they can request a free evaluation API key (US$5 of credit) at https://carriers.4sakeco.com/request-key/ and the agent then sends `Authorization: Bearer fmk_...` on paid calls instead of paying per call. Settlement is USDC on Solana mainnet, Base or Polygon; the payment request lists all three at the same price. A selection record carries a `record_hash`; `GET /verify/<record_hash>` (free) confirms we issued it. It is a record of what the data showed, not a score, and not legal advice.
 
 **Spending rules for the agent:**
 - Ask the user before the first paid call. Tell them the price, and keep a running total of what has been spent.

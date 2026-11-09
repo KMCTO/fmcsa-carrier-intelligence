@@ -6,21 +6,21 @@ Operated by 4SAKE Agent Co. Not affiliated with or endorsed by FMCSA or the US D
 
 ## Docs
 
-- [API documentation](https://kmcto.github.io/fmcsa-carrier-intelligence/docs/): curl examples for every endpoint, API-key authentication, errors, rate limits
-- [Pricing](https://kmcto.github.io/fmcsa-carrier-intelligence/pricing/): price per call for every tool, charged only when a call returns records
-- [Run a check](https://kmcto.github.io/fmcsa-carrier-intelligence/check/): browser page for key holders: carrier selection record, broker authority check, inspection and crash summary
-- [Free MC to USDOT lookup](https://kmcto.github.io/fmcsa-carrier-intelligence/lookup/): browser page for the free lookup and identity screen
-- [For agents](https://kmcto.github.io/fmcsa-carrier-intelligence/for-agents/): endpoints, x402 payment flow, prices, billable-event rule, rate limits, error codes, examples
-- [Skill](https://kmcto.github.io/fmcsa-carrier-intelligence/SKILL.md): when and how to use each tool
-- [Request a free evaluation API key](https://kmcto.github.io/fmcsa-carrier-intelligence/request-key/): $5 of credit, for people without a crypto wallet; reviewed by hand
-- [After Montgomery: what a carrier-selection file should show](https://kmcto.github.io/fmcsa-carrier-intelligence/guides/after-montgomery/)
-- [Guides index](https://kmcto.github.io/fmcsa-carrier-intelligence/guides/)
-- [How to find a USDOT number from an MC number](https://kmcto.github.io/fmcsa-carrier-intelligence/guides/mc-number-to-usdot-number/)
-- [Chameleon carriers: what they are and how to check for one](https://kmcto.github.io/fmcsa-carrier-intelligence/guides/chameleon-carriers/)
-- [FMCSA stopped updating authority and insurance files on 2026-05-14](https://kmcto.github.io/fmcsa-carrier-intelligence/guides/fmcsa-data-freeze/)
-- [Carrier vetting API quickstart](https://kmcto.github.io/fmcsa-carrier-intelligence/guides/carrier-vetting-api/)
-- [Terms of Service](https://kmcto.github.io/fmcsa-carrier-intelligence/terms/)
-- [Privacy Policy](https://kmcto.github.io/fmcsa-carrier-intelligence/privacy/)
+- [API documentation](https://carriers.4sakeco.com/docs/): curl examples for every endpoint, API-key authentication, errors, rate limits
+- [Pricing](https://carriers.4sakeco.com/pricing/): price per call for every tool, charged only when a call returns records
+- [Run a check](https://carriers.4sakeco.com/check/): browser page for key holders: carrier selection record, broker authority check, inspection and crash summary
+- [Free MC to USDOT lookup](https://carriers.4sakeco.com/lookup/): browser page for the free lookup and identity screen
+- [For agents](https://carriers.4sakeco.com/for-agents/): endpoints, x402 payment flow, prices, billable-event rule, rate limits, error codes, examples
+- [Skill](https://carriers.4sakeco.com/SKILL.md): when and how to use each tool
+- [Request a free evaluation API key](https://carriers.4sakeco.com/request-key/): $5 of credit, for people without a crypto wallet; reviewed by hand
+- [After Montgomery: what a carrier-selection file should show](https://carriers.4sakeco.com/guides/after-montgomery/)
+- [Guides index](https://carriers.4sakeco.com/guides/)
+- [How to find a USDOT number from an MC number](https://carriers.4sakeco.com/guides/mc-number-to-usdot-number/)
+- [Chameleon carriers: what they are and how to check for one](https://carriers.4sakeco.com/guides/chameleon-carriers/)
+- [FMCSA stopped updating authority and insurance files on 2026-05-14](https://carriers.4sakeco.com/guides/fmcsa-data-freeze/)
+- [Carrier vetting API quickstart](https://carriers.4sakeco.com/guides/carrier-vetting-api/)
+- [Terms of Service](https://carriers.4sakeco.com/terms/)
+- [Privacy Policy](https://carriers.4sakeco.com/privacy/)
 
 ## Endpoints
 

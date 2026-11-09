@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Carrier vetting API quickstart for TMS and broker tools</title>
 <meta name="description" content="Add FMCSA carrier checks to a TMS or onboarding flow: MC to USDOT, authority, inspections, identity screen and a hashed selection record. curl examples and costs.">
-<link rel="canonical" href="https://kmcto.github.io/fmcsa-carrier-intelligence/guides/carrier-vetting-api/">
+<link rel="canonical" href="https://carriers.4sakeco.com/guides/carrier-vetting-api/">
 <link rel="icon" type="image/svg+xml" href="../../logo.svg">
 <link rel="icon" href="../../icon.png">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="FMCSA Carrier Intelligence">
 <meta property="og:title" content="Carrier vetting API quickstart for TMS and broker tools">
 <meta property="og:description" content="Add FMCSA carrier checks to a TMS or onboarding flow: MC to USDOT, authority, inspections, identity screen and a hashed selection record. curl examples and costs.">
-<meta property="og:url" content="https://kmcto.github.io/fmcsa-carrier-intelligence/guides/carrier-vetting-api/">
-<meta property="og:image" content="https://kmcto.github.io/fmcsa-carrier-intelligence/og.png?v=2">
+<meta property="og:url" content="https://carriers.4sakeco.com/guides/carrier-vetting-api/">
+<meta property="og:image" content="https://carriers.4sakeco.com/og.png?v=2">
 <link rel="stylesheet" href="../../style.css">
 <script type="application/ld+json">
-{"@context": "https://schema.org", "@type": "Article", "headline": "Carrier vetting API quickstart for TMS and broker tools", "description": "Add FMCSA carrier checks to a TMS or onboarding flow: MC to USDOT, authority, inspections, identity screen and a hashed selection record. curl examples and costs.", "datePublished": "2026-11-09", "dateModified": "2026-11-09", "mainEntityOfPage": "https://kmcto.github.io/fmcsa-carrier-intelligence/guides/carrier-vetting-api/", "author": {"@type": "Organization", "name": "4SAKE Agent Co"}, "publisher": {"@type": "Organization", "name": "4SAKE Agent Co"}, "audience": {"@type": "Audience", "audienceType": "Developers building TMS, onboarding or broker vetting tools"}}
+{"@context": "https://schema.org", "@type": "Article", "headline": "Carrier vetting API quickstart for TMS and broker tools", "description": "Add FMCSA carrier checks to a TMS or onboarding flow: MC to USDOT, authority, inspections, identity screen and a hashed selection record. curl examples and costs.", "datePublished": "2026-11-09", "dateModified": "2026-11-09", "mainEntityOfPage": "https://carriers.4sakeco.com/guides/carrier-vetting-api/", "author": {"@type": "Organization", "name": "4SAKE Agent Co"}, "publisher": {"@type": "Organization", "name": "4SAKE Agent Co"}, "audience": {"@type": "Audience", "audienceType": "Developers building TMS, onboarding or broker vetting tools"}}
 </script>
 <script type="application/ld+json">
 {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How much does a carrier vetting check cost?", "acceptedAnswer": {"@type": "Answer", "text": "From $0.01 per call. A five-call flow with MC lookup, identity screen, carrier profile, inspection and crash summary and a hashed selection record costs $0.13 in total. You are charged only when a call returns records."}}, {"@type": "Question", "name": "Do I need a crypto wallet?", "acceptedAnswer": {"@type": "Answer", "text": "No. Request a free evaluation API key with $5 of prepaid credit and send it as a Bearer token. Wallet payment with USDC through x402 is also supported."}}, {"@type": "Question", "name": "What data does the API use?", "acceptedAnswer": {"@type": "Answer", "text": "FMCSA public records. Every response states the date its records are current as of. Authority and insurance fields for many carriers come from an FMCSA archive that stopped updating on May 14, 2026, and those records are flagged."}}, {"@type": "Question", "name": "Is there an OpenAPI description?", "acceptedAnswer": {"@type": "Answer", "text": "Yes, at the service host under /openapi.json, with one route per tool."}}]}
