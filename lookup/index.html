@@ -59,7 +59,7 @@ button[disabled] { opacity: .6; cursor: default; }
 <li>The lookup reads FMCSA's public records. Each answer states the date its records are current as of. It is not live.</li>
 <li>FMCSA stopped updating its legacy licensing archive on 2026-05-14. When a docket status comes from that archive, the result says so, and the status describes that date. Confirm current authority with FMCSA before relying on it.</li>
 <li>A flag from the identity screen is a data pattern, not a finding of fraud. In a hand review of flagged clusters, a third were legitimate affiliated fleets. Use it to decide what to look at next.</li>
-<li>This page makes the same free calls as the <a href="../docs/">API</a>, limited to 60 requests a minute per IP address. This page sets no cookies and runs no analytics. The service's own operational logs are covered by the <a href="../privacy/">Privacy Policy</a>.</li>
+<li>This page makes the same free calls as the <a href="../docs/">API</a>, limited to 60 requests a minute per IP address. This page sets no cookies. The site counts page visits with Cloudflare Web Analytics (see the <a href="../privacy/">Privacy Policy</a>). The service's own operational logs are covered by the <a href="../privacy/">Privacy Policy</a>.</li>
 </ul>
 <p>To go further, see the <a href="../docs/">API documentation</a>, <a href="../pricing/">pricing</a>, or <a href="../request-key/">request a free evaluation key</a>.</p>
 </main>
@@ -161,5 +161,6 @@ button[disabled] { opacity: .6; cursor: default; }
   });
 })();
 </script>
+<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "9e70423aa81d4ed9b7941eb41e06193b"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>
