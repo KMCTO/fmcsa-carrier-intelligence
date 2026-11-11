@@ -1,7 +1,7 @@
 ---
 name: fmcsa-carrier-intelligence
 description: "Vet a US interstate motor carrier by USDOT number before tendering freight: operating authority, insurance filings, out-of-service orders, safety history, and identity-linkage signals that help spot double brokering or a carrier re-registering under a new number. Free tools to try first; paid calls start at $0.01, are paid in USDC on Solana, Base or Polygon via x402, and are charged only when records are returned."
-version: 1.3.0
+version: 1.3.1
 metadata:
   openclaw:
     emoji: "🚛"
